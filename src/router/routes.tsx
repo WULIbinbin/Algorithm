@@ -3,9 +3,9 @@ import { lazy, Suspense } from "react";
 import Layout from "@/layout/index";
 
 const Index = lazy(() => import("@/views/index/index"));
-const Order = lazy(() => import("@/views/order/index"));
-const InvoiceQuery = lazy(() => import("@/views/invoice/invoice-query/index"));
-const InvoiceCheck = lazy(() => import("@/views/invoice/invoice-check/index"));
+const Array = lazy(() => import("@/views/data-structures/array/index"));
+const Tree = lazy(() => import("@/views/data-structures/tree/index"));
+const Sort = lazy(() => import("@/views/algorithm/sort/index"));
 
 export default function RouteMain() {
   const routes = [
@@ -22,28 +22,38 @@ export default function RouteMain() {
           ),
         },
         {
-          path: "/invoice-check",
-          element: (
-            <Suspense>
-              <InvoiceCheck />
-            </Suspense>
-          ),
+          path: "/data-structures",
+          childern: [
+            {
+              path: "/array",
+              element: (
+                <Suspense>
+                  <Array />
+                </Suspense>
+              ),
+            },
+            {
+              path: "/tree",
+              element: (
+                <Suspense>
+                  <Tree />
+                </Suspense>
+              ),
+            },
+          ],
         },
         {
-          path: "/invoice-query",
-          element: (
-            <Suspense>
-              <InvoiceQuery />
-            </Suspense>
-          ),
-        },
-        {
-          path: "/order",
-          element: (
-            <Suspense>
-              <Order />
-            </Suspense>
-          ),
+          path: "/algorithm",
+          children: [
+            {
+              path: "/algorithm/sort",
+              element: (
+                <Suspense>
+                  <Sort />
+                </Suspense>
+              ),
+            },
+          ],
         },
       ],
     },
