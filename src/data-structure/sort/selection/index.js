@@ -21,7 +21,8 @@
 */
 
 function SelectionSort(arr = []) {
-  let temp, minIndex;
+  let temp;
+  let minIndex;
   const len = arr.length;
   for (let i = 0; i < len - 1; i++) {
     minIndex = i;

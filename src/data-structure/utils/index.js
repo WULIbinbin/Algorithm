@@ -1,16 +1,18 @@
-export enum COMPARE {
-  LESS_THAN = -1,
-  BIGGER_THAN = 1,
-  EQUALS = 0,
-}
+export const COMPARE = {
+  LESS_THAN: -1,
+  BIGGER_THAN: 1,
+  EQUALS: 0,
+};
 
 // 默认大小对比
 export function defaultCompare(a, b) {
   if (a === b) {
     return COMPARE.EQUALS;
-  } else if (a > b) {
+  }
+  if (a > b) {
     return COMPARE.BIGGER_THAN;
-  } else if (a < b) {
+  }
+  if (a < b) {
     return COMPARE.LESS_THAN;
   }
 }

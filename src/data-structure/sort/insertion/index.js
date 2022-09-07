@@ -21,19 +21,20 @@
 */
 
 function InsertionSort(arr = []) {
-  let prevIndex, current;
+  let prevIndex;
+  let current;
   const len = arr.length;
-  //1
+  // 1
   for (let i = 1; i < len; i++) {
     prevIndex = i - 1;
     current = arr[i];
-    //2
+    // 2
     while (prevIndex >= 0 && arr[prevIndex] > current) {
-      //3
+      // 3
       arr[prevIndex + 1] = arr[prevIndex];
       prevIndex--;
     }
-    //5
+    // 5
     arr[prevIndex + 1] = current;
   }
   console.table(arr);

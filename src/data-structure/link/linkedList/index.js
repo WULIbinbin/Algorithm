@@ -14,7 +14,7 @@ class LinkedList {
   }
 
   append(element) {
-    let node = new Node(element);
+    const node = new Node(element);
     let current = null;
     // 链表头是否为空
     if (this.head === null) {
@@ -32,7 +32,7 @@ class LinkedList {
 
   insert(element, point) {
     if (point < 0 || point > this.length) return false;
-    let node = new Node(element);
+    const node = new Node(element);
     let current = this.head;
     let previous = null;
     let index = 0;
@@ -52,7 +52,7 @@ class LinkedList {
       node.next = current;
     }
     this.length++;
-    return true
+    return true;
   }
 }
 

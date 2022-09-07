@@ -6,12 +6,9 @@ module.exports = {
   env: {
     jest: true,
   },
-  settings: {
-    react: {
-      version: 'detect',
-    },
-  },
   rules: {
+    'no-use-before-define': 'off',
+    'no-unused-vars': 'off',
     'no-shadow': 'off',
     'no-param-reassign': ['error', { props: false }],
     'no-console': 'off',

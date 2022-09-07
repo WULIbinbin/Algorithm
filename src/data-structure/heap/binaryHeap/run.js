@@ -1,4 +1,4 @@
-import { MinHeap } from "./minHeap";
+import { MinHeap } from './minHeap';
 
 const minHeap = new MinHeap();
 minHeap.insert(13);
@@ -15,6 +15,6 @@ minHeap.insert(5);
 
 console.log(minHeap.getHeapArray());
 
-minHeap.sortHeap()
+minHeap.sortHeap();
 
 console.log(minHeap.getHeapArray());

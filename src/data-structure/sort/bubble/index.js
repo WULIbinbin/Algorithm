@@ -18,11 +18,11 @@
 function BubbleSort(arr) {
   const len = arr.length;
   for (let i = 0; i < len; i++) {
-    //3
+    // 3
     for (let j = 0; j < len - i - 1; j++) {
-      //1
+      // 1
       if (arr[j] > arr[j + 1]) {
-        let temp = arr[j + 1];
+        const temp = arr[j + 1];
         arr[j + 1] = arr[j];
         arr[j] = temp;
       }

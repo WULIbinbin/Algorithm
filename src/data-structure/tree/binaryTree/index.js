@@ -6,15 +6,10 @@ import {
   maxNode,
   minNode,
   removeNode,
-} from "./methods";
-import { NodeType } from "./types";
+} from './methods';
 
 class Node {
-  value: number | null;
-  left: NodeType | null;
-  right: NodeType;
-
-  constructor(value: number) {
+  constructor(value) {
     this.value = value;
     this.left = null;
     this.right = null;
@@ -22,8 +17,6 @@ class Node {
 }
 
 export class BinaryTree {
-  root: NodeType | null;
-
   constructor() {
     this.root = null;
   }
@@ -36,29 +29,23 @@ export class BinaryTree {
   }
 
   // 插入节点
-  insert(value: number) {
-    let newNode = new Node(value);
-    this.root === null
-      ? (this.root = newNode)
-      : this.insertNode(this.root, newNode);
+  insert(value) {
+    const newNode = new Node(value);
+    this.root === null ? (this.root = newNode) : this.insertNode(this.root, newNode);
   }
 
   // 递归插入节点
-  insertNode(node: NodeType, newNode: NodeType) {
+  insertNode(node, newNode) {
     if (newNode.value < node.value) {
-      node.left === null
-        ? (node.left = newNode)
-        : this.insertNode(node.left, newNode);
+      node.left === null ? (node.left = newNode) : this.insertNode(node.left, newNode);
     } else {
-      node.right === null
-        ? (node.right = newNode)
-        : this.insertNode(node.right, newNode);
+      node.right === null ? (node.right = newNode) : this.insertNode(node.right, newNode);
     }
   }
 
   // 中序遍历 --- 以从最小到最大的顺序访问所有节点
   inOrderTraverse() {
-    const result:Array<number> = [];
+    const result = [];
     inOrderTraverseNode(this.root, (value) => {
       result.push(value);
     });
@@ -67,7 +54,7 @@ export class BinaryTree {
 
   // 先序遍历 --- 优先于后代节点的顺序访问每个节点
   preOrderTraverse() {
-    const result:Array<number> = [];
+    const result = [];
     preOrderTraverseNode(this.root, (value) => {
       result.push(value);
     });
@@ -76,7 +63,7 @@ export class BinaryTree {
 
   // 后序遍历 --- 先访问后代节点，再访问节点本身
   postOrderTraverse() {
-    const result:Array<number> = [];
+    const result = [];
     postOrderTraverseNode(this.root, (value) => {
       result.push(value);
     });
@@ -91,11 +78,11 @@ export class BinaryTree {
     return maxNode(this.root);
   }
 
-  search(value: number) {
+  search(value) {
     return searchValue(this.root, value);
   }
 
-  remove(value: number) {
+  remove(value) {
     return removeNode(this.root, value);
   }
 }

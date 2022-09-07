@@ -1,10 +1,10 @@
-import { BinaryTree } from "./index";
-import { init } from "./view";
+import { BinaryTree } from './index';
+import { init } from './view';
 
 const binaryTree = new BinaryTree();
 
 binaryTree.init([
-  18, 12, 5, 16, 8, 
+  18, 12, 5, 16, 8,
   // 14, 2, 1, 31, 21, 17, 27, 9, 6, 34, 4, 49, 32, 19,
 ]);
 
@@ -24,6 +24,6 @@ console.log(binaryTree.search(11), binaryTree.search(21));
 
 const { root } = binaryTree;
 export default function run() {
-  document.title = "二叉搜索树视图";
+  document.title = '二叉搜索树视图';
   init(root);
 }

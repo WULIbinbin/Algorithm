@@ -1,19 +1,19 @@
-import { Canvas, Circle, Text, Line, Rect } from "@antv/g";
-import { Renderer } from "@antv/g-canvas";
+import { Canvas, Circle, Text, Line, Rect } from '@antv/g';
+import { Renderer } from '@antv/g-canvas';
 
 export async function init(tree) {
   const unit = 50;
   const deep = getDeepOfTree(tree);
   let canvasWidth = 800;
-  let distance = (deep - 1) ** 2;
-  canvasWidth = canvasWidth + (distance + deep) * unit;
+  const distance = (deep - 1) ** 2;
+  canvasWidth += (distance + deep) * unit;
   const unitNum = Math.floor(canvasWidth / unit);
   const nodeWidth = unit;
   const rootX = Math.ceil(unitNum / 2) * unit - unit / 2;
   const rootY = unit + unit / 2;
-  console.log(deep, distance, unit,canvasWidth);
+  console.log(deep, distance, unit, canvasWidth);
   const canvas = new Canvas({
-    container: "container",
+    container: 'container',
     width: canvasWidth,
     height: canvasWidth,
     renderer: new Renderer(),
@@ -26,7 +26,7 @@ export async function init(tree) {
         y1,
         x2,
         y2,
-        stroke: "#999999",
+        stroke: '#999999',
         lineWidth: 4,
         zIndex: 1,
       },
@@ -41,8 +41,8 @@ export async function init(tree) {
         y,
         width: unit,
         height: unit,
-        fill: "#f7f7f7",
-        stroke: "#e2e2e2",
+        fill: '#f7f7f7',
+        stroke: '#e2e2e2',
         lineWidth: 1,
         radius: 0,
       },
@@ -61,8 +61,8 @@ export async function init(tree) {
     if (!root) {
       return 0;
     }
-    let left = getDeepOfTree(root.left);
-    let right = getDeepOfTree(root.right);
+    const left = getDeepOfTree(root.left);
+    const right = getDeepOfTree(root.right);
     return left > right ? left + 1 : right + 1;
   }
 
@@ -73,34 +73,24 @@ export async function init(tree) {
     console.log(`层级:${deep}----距离${distance}----value:${root.value}`);
     if (root.left) {
       drawLeftLine(x, y, distance);
-      preOrderTraverse(
-        root.left,
-        x - (distance * unit) / 2,
-        y + 2 * unit,
-        distance / 2
-      );
+      preOrderTraverse(root.left, x - (distance * unit) / 2, y + 2 * unit, distance / 2);
     }
     if (root.right) {
       drawRightLine(x, y, distance);
-      preOrderTraverse(
-        root.right,
-        x + (distance * unit) / 2,
-        y + 2 * unit,
-        distance / 2
-      );
+      preOrderTraverse(root.right, x + (distance * unit) / 2, y + 2 * unit, distance / 2);
     }
   }
 
   function drawNode(value, cx, cy) {
     const circle = new Circle({
       style: {
-        cx: cx,
-        cy: cy,
+        cx,
+        cy,
         r: nodeWidth / 2 - 4,
-        fill: "#f2f2f2",
-        stroke: "#999999",
+        fill: '#f2f2f2',
+        stroke: '#999999',
         lineWidth: 4,
-        cursor: "pointer",
+        cursor: 'pointer',
         zIndex: 2,
       },
     });
@@ -109,9 +99,9 @@ export async function init(tree) {
         x: cx - 2,
         y: cy + 7,
         text: String(value),
-        textAlign: "center",
+        textAlign: 'center',
         fontSize: 18,
-        fill: "#666666",
+        fill: '#666666',
         zIndex: 3,
       },
     });

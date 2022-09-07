@@ -1,1 +1,1 @@
-import './es/promise'
+import './es/promise';
