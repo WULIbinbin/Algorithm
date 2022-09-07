@@ -1,3 +1,5 @@
+import {} from '@/u'
+
 /**
  *  Promise对象解析
  *  @Prototype 自己
@@ -9,12 +11,15 @@ function MyPromise(excute) {
     const that = this;
     this.PromiseState = "pending";
     this.PromiseResult;
-    
+    this.onResolveCallBack = [];
+    this.onRejectCallBack = [];
+
     function resolve(value) {
       console.log("resolve", value);
       if (that.PromiseState === "pending") {
         that.PromiseState = "resolved";
         that.PromiseResult = value;
+        that.onResolveCallBack.forEach((cb) => cb(value));
       }
     }
     function reject(reason) {
@@ -30,7 +35,8 @@ function MyPromise(excute) {
 }
 
 MyPromise.prototype.then = function (callBack) {
-  return callBack(this.PromiseResult);
+  if (typeof callBack !== "function"||this.onResolveCallBack)return
+   this.onResolveCallBack.push(callBack);
 };
 
 MyPromise.prototype.catch = function (callBack) {
@@ -43,7 +49,9 @@ MyPromise.prototype.finally = function () {
 };
 
 const promise1 = new MyPromise((resolve, reject) => {
-  resolve(2333);
+  setTimeout(() => {
+    resolve(2333);
+  }, 1000);
 });
 
 console.log("promise1", promise1);
