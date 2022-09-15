@@ -51,7 +51,6 @@ MyPromise.prototype.then = function then(onFulfilled, onRejected) {
   }
 
   const newPromise = new MyPromise((resolve, reject) => {
-    console.log(this.PromiseState);
     if (this.PromiseState === 'pending') {
       this.onFulfilledCallBack.push(onFulfilled);
       this.onRejectedCallBack.push(onRejected);
@@ -75,25 +74,32 @@ const promise1 = new MyPromise((resolve, reject) => {
 });
 
 const promise2 = new MyPromise((resolve, reject) => {
-  // console.log(that.add());
-
-  setTimeout(() => {
-    resolve('promise------2');
-  }, 2000);
+  try {
+    console.log(that.add());
+    setTimeout(() => {
+      resolve('promise------2');
+    }, 2000);
+  } catch (err) {
+    reject(err);
+  }
 });
 
 promise1.then(
   (res) => {
     console.log('res1', res);
-    return promise2;
   },
   (err) => {
     console.log('err1', err);
   },
 );
 
-promise1.then((res) => {
-  console.log('res2', res);
-});
+promise2.then(
+  (res) => {
+    console.log('res2', res);
+  },
+  (err) => {
+    console.log('err2', err);
+  },
+);
 
 console.log('promise1', promise1);
