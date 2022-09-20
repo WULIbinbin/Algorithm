@@ -76,6 +76,10 @@ MyPromise.prototype.then = function then(onFulfilled, onRejected) {
   return newPromise;
 };
 
+MyPromise.resolve = function (value) {
+  console.log(this);
+};
+
 function resolvePromise(newPromise, x, resolve, reject) {
   if (newPromise === x) {
     throw new Error('不能返回自身');
@@ -130,5 +134,10 @@ promise1
 //     console.log('err2', err);
 //   },
 // );
+
+const resolve2 = MyPromise.resolve(0);
+resolve2.then(res=>{
+  console.log(res)
+})
 
 console.log('promise1', promise1);
