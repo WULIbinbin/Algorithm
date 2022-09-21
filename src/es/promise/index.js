@@ -24,6 +24,7 @@ function MyPromise(resolver) {
   this.PromiseResult = undefined;
   this.onFulfilledCallBack = [];
   this.onRejectedCallBack = [];
+
   try {
     if (!isTypeOf(resolver, 'function')) {
       throw new Error('请添加回调函数');
@@ -58,30 +59,49 @@ MyPromise.prototype.then = function then(onFulfilled, onRejected) {
   if (!isTypeOf(onRejected, 'function')) {
     onRejected = (reason) => reason;
   }
-  console.log(onFulfilled);
   const newPromise = new MyPromise((resolve, reject) => {
-    console.log(this.PromiseState);
+    const fulfilledCallBack = () => {
+      try {
+        // 创建一个微任务等待 newPromise 完成初始化
+        queueMicrotask(() => {
+          const x = onFulfilled(this.PromiseResult);
+          resolvePromise(newPromise, x, resolve, reject);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    };
+    const rejectedCallBack = () => {
+      try {
+        // 创建一个微任务等待 newPromise 完成初始化
+        setTimeout(() => {
+          const x = onRejected(this.PromiseResult);
+          resolvePromise(newPromise, x, resolve, reject);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    };
     if (this.PromiseState === EPromiseState.Pending) {
-      this.onFulfilledCallBack.push(onFulfilled);
-      this.onRejectedCallBack.push(onRejected);
+      this.onFulfilledCallBack.push(fulfilledCallBack);
+      this.onRejectedCallBack.push(rejectedCallBack);
     }
     if (this.PromiseState === EPromiseState.Fulfilled) {
-      const x = onFulfilled(this.PromiseResult);
-      resolvePromise(newPromise, x, resolve, reject);
+      fulfilledCallBack();
     }
     if (this.PromiseState === EPromiseState.Rejected) {
-      onRejected(this.PromiseResult);
+      rejectedCallBack();
     }
   });
   return newPromise;
 };
 
 function resolvePromise(newPromise, x, resolve, reject) {
+  // console.log(newPromise, x);
   if (newPromise === x) {
     throw new Error('不能返回自身');
   }
   // 判断x是不是 MyPromise 实例对象
-  console.log(x);
   if (x instanceof MyPromise) {
     x.then(resolve, reject);
   } else {
@@ -89,10 +109,16 @@ function resolvePromise(newPromise, x, resolve, reject) {
   }
 }
 MyPromise.resolve = function resolve(value) {
-  console.log(this);
+  return new MyPromise((resolve) => {
+    resolve(value);
+  });
 };
 
-
+MyPromise.reject = function reject(value) {
+  return new MyPromise((resolve, reject) => {
+    reject(value);
+  });
+};
 
 const promise1 = new MyPromise((resolve, reject) => {
   setTimeout(() => {
@@ -118,14 +144,14 @@ const promise3 = () =>
     }, 1000);
   });
 
-promise1
-  .then((res) => {
-    console.log('res1', res);
-    return promise3();
-  })
-  .then((res) => {
-    console.log('res1_1', res);
-  });
+// promise1
+//   .then((res) => {
+//     console.log('res1', res);
+//     return promise3();
+//   })
+//   .then((res) => {
+//     console.log('res1_1', res);
+//   });
 
 // promise2.then(
 //   (res) => {
@@ -136,9 +162,40 @@ promise1
 //   },
 // );
 
-const resolve2 = MyPromise.resolve(0);
-resolve2.then(res=>{
-  console.log(res)
-})
+// const resolve1 = MyPromise.resolve(1);
+// const resolve2 = MyPromise.resolve(2);
 
-console.log('promise1', promise1);
+// resolve1
+//   .then((res) => {
+//     console.log(res);
+//     return resolve2;
+//   })
+//   .then((res) => {
+//     console.log(res);
+//   });
+
+MyPromise.resolve()
+  .then(() => {
+    console.log(0);
+    return MyPromise.resolve(4);
+  })
+  .then((res) => {
+    console.log(res);
+  });
+
+MyPromise.resolve()
+  .then(() => {
+    console.log(1);
+  })
+  .then(() => {
+    console.log(2);
+  })
+  .then(() => {
+    console.log(3);
+  })
+  .then(() => {
+    console.log(5);
+  })
+  .then(() => {
+    console.log(6);
+  });
