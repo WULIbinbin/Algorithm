@@ -45,7 +45,7 @@ function MyPromise(resolver) {
   }
   function reject(reason) {
     if (that.PromiseState === EPromiseState.Pending) {
-      that.PromiseState = EPromiseState.Fulfilled;
+      that.PromiseState = EPromiseState.Rejected;
       that.PromiseResult = reason;
       that.onRejectedCallBack.forEach((cb) => cb(reason));
     }
@@ -63,7 +63,7 @@ MyPromise.prototype.then = function then(onFulfilled, onRejected) {
     const fulfilledCallBack = () => {
       try {
         // 创建一个微任务等待 newPromise 完成初始化
-        queueMicrotask(() => {
+        setTimeout(() => {
           const x = onFulfilled(this.PromiseResult);
           resolvePromise(newPromise, x, resolve, reject);
         });
@@ -97,7 +97,6 @@ MyPromise.prototype.then = function then(onFulfilled, onRejected) {
 };
 
 function resolvePromise(newPromise, x, resolve, reject) {
-  // console.log(newPromise, x);
   if (newPromise === x) {
     throw new Error('不能返回自身');
   }
@@ -109,6 +108,7 @@ function resolvePromise(newPromise, x, resolve, reject) {
   }
 }
 MyPromise.resolve = function resolve(value) {
+  if (value instanceof MyPromise) return value;
   return new MyPromise((resolve) => {
     resolve(value);
   });
@@ -120,29 +120,29 @@ MyPromise.reject = function reject(value) {
   });
 };
 
-const promise1 = new MyPromise((resolve, reject) => {
-  setTimeout(() => {
-    resolve('promise------1');
-  }, 2000);
-});
+// const promise1 = new MyPromise((resolve, reject) => {
+//   setTimeout(() => {
+//     resolve('promise------1');
+//   }, 2000);
+// });
 
-const promise2 = new MyPromise((resolve, reject) => {
-  try {
-    console.log(that.add());
-    setTimeout(() => {
-      resolve('promise------2');
-    }, 2000);
-  } catch (err) {
-    reject(err);
-  }
-});
+// const promise2 = new MyPromise((resolve, reject) => {
+//   try {
+//     console.log(that.add());
+//     setTimeout(() => {
+//       resolve('promise------2');
+//     }, 2000);
+//   } catch (err) {
+//     reject(err);
+//   }
+// });
 
-const promise3 = () =>
-  new MyPromise((resolve, reject) => {
-    setTimeout(() => {
-      resolve('promise------3');
-    }, 1000);
-  });
+// const promise3 = () =>
+//   new MyPromise((resolve, reject) => {
+//     setTimeout(() => {
+//       resolve('promise------3');
+//     }, 1000);
+//   });
 
 // promise1
 //   .then((res) => {
@@ -162,40 +162,58 @@ const promise3 = () =>
 //   },
 // );
 
-// const resolve1 = MyPromise.resolve(1);
-// const resolve2 = MyPromise.resolve(2);
+// const resolve1 = Promise.resolve(1);
+// const resolve2 = Promise.resolve(2);
+// const reject1 = Promise.reject(new Error(31));
+// const reject2 = Promise.reject(new Error(32));
 
-// resolve1
-//   .then((res) => {
-//     console.log(res);
-//     return resolve2;
+const resolve1 = MyPromise.resolve(1);
+const resolve2 = MyPromise.resolve(2);
+const reject1 = MyPromise.reject(new Error(31));
+// const reject2 = MyPromise.reject(new Error(32));
+
+resolve1
+  .then(
+    (res) => {
+      console.log('res1', res);
+      return resolve2;
+    },
+    (err) => {
+      console.log('err1', err);
+    },
+  )
+  .then(
+    (res) => {
+      console.log(that)
+      console.log('res2', res);
+    },
+    (err) => {
+      console.log('err2', err);
+    },
+  );
+
+// MyPromise.resolve()
+//   .then(() => {
+//     console.log(0);
+//     return MyPromise.resolve(4);
 //   })
 //   .then((res) => {
 //     console.log(res);
 //   });
 
-MyPromise.resolve()
-  .then(() => {
-    console.log(0);
-    return MyPromise.resolve(4);
-  })
-  .then((res) => {
-    console.log(res);
-  });
-
-MyPromise.resolve()
-  .then(() => {
-    console.log(1);
-  })
-  .then(() => {
-    console.log(2);
-  })
-  .then(() => {
-    console.log(3);
-  })
-  .then(() => {
-    console.log(5);
-  })
-  .then(() => {
-    console.log(6);
-  });
+// MyPromise.resolve()
+//   .then(() => {
+//     console.log(1);
+//   })
+//   .then(() => {
+//     console.log(2);
+//   })
+//   .then(() => {
+//     console.log(3);
+//   })
+//   .then(() => {
+//     console.log(5);
+//   })
+//   .then(() => {
+//     console.log(6);
+//   });
