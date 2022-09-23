@@ -1,4 +1,4 @@
-import { isTypeOf } from '@/utils/tools';
+const { isTypeOf } = require('../../utils/tools');
 
 /**
  *  Promise对象解析
@@ -167,30 +167,30 @@ MyPromise.reject = function reject(value) {
 // const reject1 = Promise.reject(new Error(31));
 // const reject2 = Promise.reject(new Error(32));
 
-const resolve1 = MyPromise.resolve(1);
-const resolve2 = MyPromise.resolve(2);
-const reject1 = MyPromise.reject(new Error(31));
-// const reject2 = MyPromise.reject(new Error(32));
+// const resolve1 = MyPromise.resolve(1);
+// const resolve2 = MyPromise.resolve(2);
+// const reject1 = MyPromise.reject(new Error(31));
+// // const reject2 = MyPromise.reject(new Error(32));
 
-resolve1
-  .then(
-    (res) => {
-      console.log('res1', res);
-      return resolve2;
-    },
-    (err) => {
-      console.log('err1', err);
-    },
-  )
-  .then(
-    (res) => {
-      console.log(that)
-      console.log('res2', res);
-    },
-    (err) => {
-      console.log('err2', err);
-    },
-  );
+// resolve1
+//   .then(
+//     (res) => {
+//       console.log('res1', res);
+//       return resolve2;
+//     },
+//     (err) => {
+//       console.log('err1', err);
+//     },
+//   )
+//   .then(
+//     (res) => {
+//       console.log(that)
+//       console.log('res2', res);
+//     },
+//     (err) => {
+//       console.log('err2', err);
+//     },
+//   );
 
 // MyPromise.resolve()
 //   .then(() => {
@@ -217,3 +217,5 @@ resolve1
 //   .then(() => {
 //     console.log(6);
 //   });
+
+module.exports = MyPromise;

@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint ./src --ext js,jsx",
     "lint:fix": "eslint ./src --ext js,jsx --fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test-promise": "promises-aplus-tests src/index.js"
   },
   "author": "WULIbinbin",
   "license": "ISC",
@@ -21,6 +22,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "husky": "^8.0.1",
     "jest": "^27.0.6",
+    "promises-aplus-tests": "^2.1.2",
     "vite": "^3.0.5"
   },
   "dependencies": {
