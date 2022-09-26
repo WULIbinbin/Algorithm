@@ -13,14 +13,12 @@ import { isTypeOf } from '../../utils/tools';
  *
  */
 
-const EPromiseState = {
-  Pending: 'pending',
-  Fulfilled: 'fulfilled',
-  Rejected: 'rejected',
-};
+const PENDING = 'pending';
+const FULFILLED = 'fulfilled';
+const REJECTED = 'rejected';
 function MyPromise(resolver) {
   const that = this;
-  this.PromiseState = EPromiseState.Pending;
+  this.PromiseState = PENDING;
   this.PromiseResult = undefined;
   this.onFulfilledCallBack = [];
   this.onRejectedCallBack = [];
@@ -34,8 +32,8 @@ function MyPromise(resolver) {
     reject(error);
   }
   function resolve(value) {
-    if (that.PromiseState === EPromiseState.Pending) {
-      that.PromiseState = EPromiseState.Fulfilled;
+    if (that.PromiseState === PENDING) {
+      that.PromiseState = FULFILLED;
       that.PromiseResult = value;
       // 因为一个Promise可以有多个then函数，可以有多个地方调用。
       // 为了多个then函数内部之间互不干扰，做类似发布订阅的操作，把then的回调函数放在数组里，
@@ -44,8 +42,8 @@ function MyPromise(resolver) {
     }
   }
   function reject(reason) {
-    if (that.PromiseState === EPromiseState.Pending) {
-      that.PromiseState = EPromiseState.Rejected;
+    if (that.PromiseState === PENDING) {
+      that.PromiseState = REJECTED;
       that.PromiseResult = reason;
       that.onRejectedCallBack.forEach((cb) => cb(reason));
     }
@@ -82,14 +80,14 @@ MyPromise.prototype.then = function then(onFulfilled, onRejected) {
         reject(error);
       }
     };
-    if (this.PromiseState === EPromiseState.Pending) {
+    if (this.PromiseState === PENDING) {
       this.onFulfilledCallBack.push(fulfilledCallBack);
       this.onRejectedCallBack.push(rejectedCallBack);
     }
-    if (this.PromiseState === EPromiseState.Fulfilled) {
+    if (this.PromiseState === FULFILLED) {
       fulfilledCallBack();
     }
-    if (this.PromiseState === EPromiseState.Rejected) {
+    if (this.PromiseState === REJECTED) {
       rejectedCallBack();
     }
   });
@@ -120,47 +118,47 @@ MyPromise.reject = function reject(value) {
   });
 };
 
-// const promise1 = new MyPromise((resolve, reject) => {
-//   setTimeout(() => {
-//     resolve('promise------1');
-//   }, 2000);
-// });
+const promise1 = new MyPromise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('promise------1');
+  }, 2000);
+});
 
-// const promise2 = new MyPromise((resolve, reject) => {
-//   try {
-//     console.log(that.add());
-//     setTimeout(() => {
-//       resolve('promise------2');
-//     }, 2000);
-//   } catch (err) {
-//     reject(err);
-//   }
-// });
+const promise2 = new MyPromise((resolve, reject) => {
+  try {
+    setTimeout(() => {
+      console.log(that.add());
+      resolve('promise------2');
+    }, 2000);
+  } catch (err) {
+    reject(err);
+  }
+});
 
-// const promise3 = () =>
-//   new MyPromise((resolve, reject) => {
-//     setTimeout(() => {
-//       resolve('promise------3');
-//     }, 1000);
-//   });
+const promise3 = () =>
+  new MyPromise((resolve, reject) => {
+    setTimeout(() => {
+      resolve('promise------3');
+    }, 1000);
+  });
 
-// promise1
-//   .then((res) => {
-//     console.log('res1', res);
-//     return promise3();
-//   })
-//   .then((res) => {
-//     console.log('res1_1', res);
-//   });
+promise1
+  .then((res) => {
+    console.log('res1', res);
+    return promise3();
+  })
+  .then((res) => {
+    console.log('res1_1', res);
+  });
 
-// promise2.then(
-//   (res) => {
-//     console.log('res2', res);
-//   },
-//   (err) => {
-//     console.log('err2', err);
-//   },
-// );
+promise2.then(
+  (res) => {
+    console.log('res2', res);
+  },
+  (err) => {
+    console.log('err2', err);
+  },
+);
 
 // const resolve1 = Promise.resolve(1);
 // const resolve2 = Promise.resolve(2);
