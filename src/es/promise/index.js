@@ -1,4 +1,4 @@
-const { isTypeOf } = require('../../utils/tools');
+import { isTypeOf } from '../../utils/tools';
 
 /**
  *  Promise对象解析
@@ -218,4 +218,4 @@ MyPromise.reject = function reject(value) {
 //     console.log(6);
 //   });
 
-module.exports = MyPromise;
+export default MyPromise;

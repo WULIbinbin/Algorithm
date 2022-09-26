@@ -1,17 +1,17 @@
-import { defineConfig } from "vite";
-import { resolve } from "path";
+import { defineConfig } from 'vite';
+import { resolve } from 'path';
 
 export default defineConfig({
-  base: "./",
-  mode: "development",
+  base: './',
+  mode: 'development',
   server: {
     port: 8897,
   },
-  esbuild: {
-  },
+  esbuild: {},
   resolve: {
     alias: {
-      "@": "/src/",
+      '@': '/src/',
     },
   },
+  plugins: [],
 });
