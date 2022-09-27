@@ -52,6 +52,7 @@ function MyPromise(resolver) {
       // 因为一个Promise可以有多个then函数，可以有多个地方调用。
       // 为了多个then函数内部之间互不干扰，做类似发布订阅的操作，把then的回调函数放在数组里，
       // 确保每个then里的回调函数都能被调用。
+      // PromiseA+ 2.2.6.1
       that.onFulfilledCallBack.forEach((cb) => cb(value));
     }
   }
@@ -59,49 +60,60 @@ function MyPromise(resolver) {
     if (that.PromiseState === PENDING) {
       that.PromiseState = REJECTED;
       that.PromiseResult = reason;
+      // PromiseA+ 2.2.6.2
       that.onRejectedCallBack.forEach((cb) => cb(reason));
     }
   }
 }
 
 MyPromise.prototype.then = function then(onFulfilled, onRejected) {
+  // PromiseA+ 2.2.1 / PromiseA+ 2.2.5 / PromiseA+ 2.2.7.3 / PromiseA+ 2.2.7.4
   if (!isTypeOf(onFulfilled, 'function')) {
     onFulfilled = (value) => value;
   }
   if (!isTypeOf(onRejected, 'function')) {
-    onRejected = (reason) => reason;
+    onRejected = (reason) => {
+      throw reason;
+    };
   }
+  // PromiseA+ 2.2.7
   const newPromise = new MyPromise((resolve, reject) => {
     const fulfilledCallBack = () => {
-      try {
-        // 创建一个微任务等待 newPromise 完成初始化
-        setTimeout(() => {
+      // 创建一个微任务等待 newPromise 完成初始化
+      // setTimeout 模拟 queueMicrotask 微任务
+      // 作用：由于 resolvePromise 需要拿到 MyPromise 完成初次化后的 newPromise 变量，
+      // 来判断 newPromise ，必须要创建新的任务，去等待 -
+      // MyPromise 初始化完成后再去调用。
+      // PromiseA+ 2.2.4 --- setTimeout
+      setTimeout(() => {
+        try {
           const x = onFulfilled(this.PromiseResult);
           resolvePromise(newPromise, x, resolve, reject);
-        });
-      } catch (error) {
-        reject(error);
-      }
+        } catch (error) {
+          reject(error);
+        }
+      });
     };
     const rejectedCallBack = () => {
-      try {
-        // 创建一个微任务等待 newPromise 完成初始化
-        setTimeout(() => {
+      setTimeout(() => {
+        try {
           const x = onRejected(this.PromiseResult);
           resolvePromise(newPromise, x, resolve, reject);
-        });
-      } catch (error) {
-        reject(error);
-      }
+        } catch (error) {
+          reject(error);
+        }
+      });
     };
     if (this.PromiseState === PENDING) {
       this.onFulfilledCallBack.push(fulfilledCallBack);
       this.onRejectedCallBack.push(rejectedCallBack);
     }
     if (this.PromiseState === FULFILLED) {
+      // PromiseA+ 2.2.2
       fulfilledCallBack();
     }
     if (this.PromiseState === REJECTED) {
+      // PromiseA+ 2.2.3
       rejectedCallBack();
     }
   });
@@ -109,8 +121,9 @@ MyPromise.prototype.then = function then(onFulfilled, onRejected) {
 };
 
 function resolvePromise(newPromise, x, resolve, reject) {
+  // PromiseA+ 2.3.1
   if (newPromise === x) {
-    throw new Error('不能返回自身');
+    throw new TypeError('Chaining cycle:不能返回自身');
   }
   // 判断x是不是 MyPromise 实例对象
   if (x instanceof MyPromise) {
