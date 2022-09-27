@@ -1,4 +1,4 @@
-const { MyPromise } = require('./lib/es.umd');
+const { MyPromise } = require('./dist-promise/es.umd');
 
 MyPromise.deferred = function () {
   const result = {};

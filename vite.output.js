@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   build: {
-    outDir: 'lib',
+    outDir: 'dist-promise',
     lib: {
       entry: path.resolve(__dirname, './src/es'),
       name: 'es',
