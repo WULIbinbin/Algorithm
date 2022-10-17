@@ -122,14 +122,47 @@ MyPromise.prototype.then = function then(onFulfilled, onRejected) {
 };
 
 function resolvePromise(newPromise, x, resolve, reject) {
-  // PromiseA+ 2.3.1
+  // PromiseA+ 2.3.1 如果 promise2 和 x 相等，那么 reject promise with a TypeError
   if (newPromise === x) {
     throw new TypeError('Chaining cycle:不能返回自身');
   }
-  // 判断x是不是 MyPromise 实例对象
-  if (x instanceof MyPromise) {
-    x.then(resolve, reject);
+  // 判断 x 是不是 MyPromise 实例对象
+  if (x && (isTypeOf(x, 'object') || isTypeOf(x, 'function'))) {
+    // PromiseA+ 2.3.3.3.3 只能调用一次
+    let used = false;
+    try {
+      const { then } = x;
+      if (isTypeOf(then, 'function')) {
+        // PromiseA+ 2.3.3
+        then.call(
+          x,
+          (res) => {
+            // PromiseA+ 2.3.3.1
+            if (used) return;
+            used = true;
+            resolvePromise(newPromise, res, resolve, reject);
+          },
+          (err) => {
+            // PromiseA+2.3.3.2
+            if (used) return;
+            used = true;
+            reject(err);
+          },
+        );
+      } else {
+        // PromiseA+2.3.3.4
+        if (used) return;
+        used = true;
+        resolve(x);
+      }
+    } catch (err) {
+      // PromiseA+ 2.3.3.2
+      if (used) return;
+      used = true;
+      reject(err);
+    }
   } else {
+    // PromiseA+ 2.3.3.4
     resolve(x);
   }
 }
@@ -145,102 +178,5 @@ MyPromise.reject = function reject(value) {
     reject(value);
   });
 };
-
-const promise1 = new MyPromise((resolve, reject) => {
-  setTimeout(() => {
-    resolve('promise------1');
-  }, 2000);
-});
-
-const promise2 = new MyPromise((resolve, reject) => {
-  try {
-    const add = null;
-    console.log(add());
-    resolve('promise------2');
-  } catch (err) {
-    reject(err);
-  }
-});
-
-const promise3 = () =>
-  new MyPromise((resolve, reject) => {
-    setTimeout(() => {
-      resolve('promise------3');
-    }, 1000);
-  });
-
-promise1
-  .then((res) => {
-    console.log('res1', res);
-    return promise3();
-  })
-  .then((res) => {
-    console.log('res1_1', res);
-  });
-
-promise2.then(
-  (res) => {
-    console.log('res2', res);
-  },
-  (err) => {
-    console.log('err2', err);
-  },
-);
-
-// const resolve1 = Promise.resolve(1);
-// const resolve2 = Promise.resolve(2);
-// const reject1 = Promise.reject(new Error(31));
-// const reject2 = Promise.reject(new Error(32));
-
-// const resolve1 = MyPromise.resolve(1);
-// const resolve2 = MyPromise.resolve(2);
-// const reject1 = MyPromise.reject(new Error(31));
-// // const reject2 = MyPromise.reject(new Error(32));
-
-// resolve1
-//   .then(
-//     (res) => {
-//       console.log('res1', res);
-//       return resolve2;
-//     },
-//     (err) => {
-//       console.log('err1', err);
-//     },
-//   )
-//   .then(
-//     (res) => {
-//       console.log(that)
-//       console.log('res2', res);
-//     },
-//     (err) => {
-//       console.log('err2', err);
-//     },
-//   );
-
-// MyPromise.resolve()
-//   .then(() => {
-//     console.log(0);
-//     return MyPromise.resolve(4);
-//   })
-//   .then((res) => {
-//     console.log(res);
-//   });
-
-// MyPromise.resolve()
-//   .then(() => {
-//     console.log(1);
-//   })
-//   .then(() => {
-//     console.log(2);
-//   })
-//   .then(() => {
-//     console.log(3);
-//   })
-//   .then(() => {
-//     console.log(5);
-//   })
-//   .then(() => {
-//     console.log(6);
-//   });
 
 export default MyPromise;

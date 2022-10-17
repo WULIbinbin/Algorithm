@@ -1,1 +1,1 @@
-import './es/promise/index';
+import './es/index';
