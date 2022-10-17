@@ -68,6 +68,7 @@ function MyPromise(resolver) {
 
 MyPromise.prototype.then = function then(onFulfilled, onRejected) {
   // PromiseA+ 2.2.1 / PromiseA+ 2.2.5 / PromiseA+ 2.2.7.3 / PromiseA+ 2.2.7.4
+  // onFulfilled和onRejected必须是函数类型
   if (!isTypeOf(onFulfilled, 'function')) {
     onFulfilled = (value) => value;
   }
