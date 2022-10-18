@@ -46,31 +46,33 @@ export const MyPromise = promise;
 // );
 
 // const resolve1 = Promise.resolve(1);
-// const resolve2 = Promise.resolve(2);
+const resolve2 = Promise.resolve(2);
 // const reject1 = Promise.reject(new Error(31));
-// const reject2 = Promise.reject(new Error(32));
+const reject2 = Promise.reject(new Error(32));
 
 const resolve1 = MyPromise.resolve(1);
-const resolve2 = MyPromise.resolve(2);
 const reject1 = MyPromise.reject(new Error(31));
-const reject2 = MyPromise.reject(new Error(32));
+// const reject2 = MyPromise.reject(new Error(32));
+
+resolve2
+  .then((res) => 2)
+  .then(
+    (res) => {
+      console.log(res);
+    },
+    (err1) => {
+      console.log('err1', err1);
+    },
+  );
 
 resolve1
+  .then((res) => 2)
   .then(
     (res) => {
-      console.log('res1', res);
-      return resolve2;
+      console.log('res2_2', res);
     },
     (err) => {
-      console.log('err1', err);
-    },
-  )
-  .then(
-    (res) => {
-      console.log('res2', res);
-    },
-    (err) => {
-      console.log('err2', err);
+      console.log('err2_2', err);
     },
   );
 
