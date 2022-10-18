@@ -23,7 +23,9 @@ console.log(binaryTree.search(11), binaryTree.search(21));
 // console.log(binaryTree.remove(4));
 
 const { root } = binaryTree;
-export default function run() {
+function run() {
   document.title = '二叉搜索树视图';
   init(root);
 }
+
+run();
