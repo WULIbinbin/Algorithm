@@ -1,94 +1,107 @@
-function f(t, e = "undefined") {
-  return Object.prototype.toString.call(t) === `[object ${e[0].toUpperCase()}${e.substring(1)}]`;
+function f(n, t = "undefined") {
+  return Object.prototype.toString.call(n) === `[object ${t[0].toUpperCase()}${t.substring(1)}]`;
 }
-const l = "pending", m = "fulfilled", P = "rejected";
-function r(t) {
-  const e = this;
-  this.PromiseState = l, this.PromiseResult = void 0, this.onFulfilledCallBack = [], this.onRejectedCallBack = [];
+const u = "pending", P = "fulfilled", d = "rejected";
+function s(n) {
+  const t = this;
+  this.PromiseState = u, this.PromiseResult = void 0, this.onFulfilledCallBack = [], this.onRejectedCallBack = [];
   try {
-    if (!f(t, "function"))
+    if (!f(n, "function"))
       throw new Error("\u8BF7\u6DFB\u52A0\u56DE\u8C03\u51FD\u6570");
-    t(s, n);
-  } catch (o) {
-    n(o);
+    n(r, i);
+  } catch (e) {
+    i(e);
   }
-  function s(o) {
-    e.PromiseState === l && (e.PromiseState = m, e.PromiseResult = o, e.onFulfilledCallBack.forEach((i) => i(o)));
+  function r(e) {
+    t.PromiseState === u && (t.PromiseState = P, t.PromiseResult = e, t.onFulfilledCallBack.forEach((o) => o(e)));
   }
-  function n(o) {
-    e.PromiseState === l && (e.PromiseState = P, e.PromiseResult = o, e.onRejectedCallBack.forEach((i) => i(o)));
+  function i(e) {
+    t.PromiseState === u && (t.PromiseState = d, t.PromiseResult = e, t.onRejectedCallBack.forEach((o) => o(e)));
   }
 }
-r.prototype.then = function(e, s) {
-  f(e, "function") || (e = (o) => o), f(s, "function") || (s = (o) => o);
-  const n = new r((o, i) => {
-    const a = () => {
-      try {
-        setTimeout(() => {
-          const c = e(this.PromiseResult);
-          h(n, c, o, i);
-        });
-      } catch (c) {
-        i(c);
-      }
-    }, u = () => {
-      try {
-        setTimeout(() => {
-          const c = s(this.PromiseResult);
-          h(n, c, o, i);
-        });
-      } catch (c) {
-        i(c);
-      }
+s.prototype.then = function(t, r) {
+  f(t, "function") || (t = (e) => e), f(r, "function") || (r = (e) => {
+    throw e;
+  });
+  const i = new s((e, o) => {
+    const l = () => {
+      setTimeout(() => {
+        try {
+          const c = t(this.PromiseResult);
+          h(i, c, e, o);
+        } catch (c) {
+          o(c);
+        }
+      });
+    }, m = () => {
+      setTimeout(() => {
+        try {
+          const c = r(this.PromiseResult);
+          h(i, c, e, o);
+        } catch (c) {
+          o(c);
+        }
+      });
     };
-    this.PromiseState === l && (this.onFulfilledCallBack.push(a), this.onRejectedCallBack.push(u)), this.PromiseState === m && a(), this.PromiseState === P && u();
+    this.PromiseState === u && (this.onFulfilledCallBack.push(l), this.onRejectedCallBack.push(m)), this.PromiseState === P && l(), this.PromiseState === d && m();
   });
-  return n;
+  return i;
 };
-function h(t, e, s, n) {
-  if (t === e)
-    throw new Error("\u4E0D\u80FD\u8FD4\u56DE\u81EA\u8EAB");
-  e instanceof r ? e.then(s, n) : s(e);
+function h(n, t, r, i) {
+  if (n === t)
+    throw new TypeError("Chaining cycle:\u4E0D\u80FD\u8FD4\u56DE\u81EA\u8EAB");
+  if (t && (f(t, "object") || f(t, "function"))) {
+    let e = !1;
+    try {
+      const { then: o } = t;
+      if (f(o, "function"))
+        o.call(
+          t,
+          (l) => {
+            e || (e = !0, h(n, l, r, i));
+          },
+          (l) => {
+            e || (e = !0, i(l));
+          }
+        );
+      else {
+        if (e)
+          return;
+        e = !0, r(t);
+      }
+    } catch (o) {
+      if (e)
+        return;
+      e = !0, i(o);
+    }
+  } else
+    r(t);
 }
-r.resolve = function(e) {
-  return e instanceof r ? e : new r((s) => {
-    s(e);
+s.resolve = function(t) {
+  return t instanceof s ? t : new s((r) => {
+    r(t);
   });
 };
-r.reject = function(e) {
-  return new r((s, n) => {
-    n(e);
+s.reject = function(t) {
+  return new s((r, i) => {
+    i(t);
   });
 };
-const p = new r((t, e) => {
-  setTimeout(() => {
-    t("promise------1");
-  }, 2e3);
-}), d = new r((t, e) => {
-  try {
-    setTimeout(() => {
-      console.log(that.add()), t("promise------2");
-    }, 2e3);
-  } catch (s) {
-    e(s);
-  }
-}), w = () => new r((t, e) => {
-  setTimeout(() => {
-    t("promise------3");
-  }, 1e3);
+const a = s;
+a.resolve().then(() => (console.log(0), a.resolve(4))).then((n) => {
+  console.log(n);
 });
-p.then((t) => (console.log("res1", t), w())).then((t) => {
-  console.log("res1_1", t);
+a.resolve().then(() => {
+  console.log(1);
+}).then(() => {
+  console.log(2);
+}).then(() => {
+  console.log(3);
+}).then(() => {
+  console.log(5);
+}).then(() => {
+  console.log(6);
 });
-d.then(
-  (t) => {
-    console.log("res2", t);
-  },
-  (t) => {
-    console.log("err2", t);
-  }
-);
-const C = r;
 export {
-  C as MyPromise
+  a as MyPromise
 };
