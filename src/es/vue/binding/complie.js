@@ -10,6 +10,7 @@ export function Compile(vm) {
 Compile.prototype = {
   init() {
     this.fragment = this.nodeFragment(this.el);
+    this.compileNode(this.fragment);
   },
   nodeFragment(el) {
     const fragment = document.createDocumentFragment();
@@ -21,9 +22,6 @@ Compile.prototype = {
     }
     return fragment;
   },
-};
-
-Compile.prototype = {
   compileNode(fragment) {
     let childNodes = fragment.childNodes;
     [...childNodes].forEach((node) => {
@@ -43,7 +41,9 @@ Compile.prototype = {
     });
   },
   compile(node) {
+    console.log(node);
     let nodeAttrs = node.attributes;
+    console.log(nodeAttrs);
     [...nodeAttrs].forEach((attr) => {
       let name = attr.name;
       if (this.isDirective(name)) {
@@ -55,5 +55,13 @@ Compile.prototype = {
       }
     });
   },
-  // 省略。。。
+  isElementNode(node) {
+    return node && node.nodeType === 1;
+  },
+  isTextNode(node) {
+    return node && (node.nodeType === 3 || node.nodeName === '#text');
+  },
+  isDirective(directive) {
+    return directive.startsWith('v-');
+  },
 };
