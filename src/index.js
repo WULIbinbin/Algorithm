@@ -7,6 +7,7 @@ const vm = new Mvue({
   data() {
     return {
       name: 'binbin',
+      sex: 'man',
     };
   },
 });

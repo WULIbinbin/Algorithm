@@ -7,6 +7,9 @@ export function Compile(vm) {
   this.init();
 }
 
+const reg = /\{\{(.+?)\}\}/g;
+const reg2 = /\{\{(.*)\}\}/;
+
 Compile.prototype = {
   init() {
     this.fragment = this.nodeFragment(this.el);
@@ -23,15 +26,15 @@ Compile.prototype = {
     return fragment;
   },
   compileNode(fragment) {
-    let childNodes = fragment.childNodes;
+    const { childNodes } = fragment;
     [...childNodes].forEach((node) => {
-      let reg = /\{\{(.*)\}\}/;
-      let text = node.textContent;
+      const text = node.textContent;
+      console.log(text);
       if (this.isElementNode(node)) {
         this.compile(node); // 渲染指令模板
       } else if (this.isTextNode(node) && reg.test(text)) {
-        let prop = RegExp.$1;
-        this.compileText(node, prop); // 渲染{{}} 模板
+        const textArr = text.match(reg);
+        this.compileText(node, textArr); // 渲染{{}} 模板
       }
 
       // 递归编译子节点
@@ -42,12 +45,12 @@ Compile.prototype = {
   },
   compile(node) {
     console.log(node);
-    let nodeAttrs = node.attributes;
+    const nodeAttrs = node.attributes;
     console.log(nodeAttrs);
     [...nodeAttrs].forEach((attr) => {
-      let name = attr.name;
+      const { name } = attr;
       if (this.isDirective(name)) {
-        let value = attr.value;
+        const { value } = attr;
         if (name === 'v-model') {
           this.compileModel(node, value);
         }
@@ -63,5 +66,23 @@ Compile.prototype = {
   },
   isDirective(directive) {
     return directive.startsWith('v-');
+  },
+  compileModel(node, value) {
+    console.log(node, value);
+  },
+  compileText(node, textArr) {
+    console.log(textArr);
+    const keyObj = {};
+    let i = 0;
+    while (i < textArr.length) {
+      const key = reg2.exec(textArr[i]);
+      const value = this.vm.$data[key];
+      this.updateView(node, value);
+      i++;
+    }
+    console.log(keyObj);
+  },
+  updateView (node, value) {
+    node.textContent = typeof value === 'undefined' ? '' : value;
   },
 };

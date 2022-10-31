@@ -9,7 +9,7 @@ export function Mvue(options) {
   this.init();
 }
 
-Mvue.prototype.init = function () {
+Mvue.prototype.init = function init() {
   observer(this.$data);
   new Compile(this);
 };
