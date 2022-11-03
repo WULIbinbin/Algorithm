@@ -7,7 +7,7 @@ export function Compile(vm) {
   this.init();
 }
 
-const reg = /\{\{(.+?)\}\}/g;
+const reg = /\{\{(.+?)\}\}/;
 const reg2 = /\{\{(.*)\}\}/;
 
 Compile.prototype = {
@@ -33,8 +33,9 @@ Compile.prototype = {
       if (this.isElementNode(node)) {
         this.compile(node); // 渲染指令模板
       } else if (this.isTextNode(node) && reg.test(text)) {
-        const textArr = text.match(reg);
-        this.compileText(node, textArr); // 渲染{{}} 模板
+        const ctx = text.match(reg)[1];
+        console.log(ctx);
+        this.compileText(node, ctx); // 渲染{{}} 模板
       }
 
       // 递归编译子节点
@@ -70,19 +71,11 @@ Compile.prototype = {
   compileModel(node, value) {
     console.log(node, value);
   },
-  compileText(node, textArr) {
-    console.log(textArr);
-    const keyObj = {};
-    let i = 0;
-    while (i < textArr.length) {
-      const key = reg2.exec(textArr[i]);
-      const value = this.vm.$data[key];
-      this.updateView(node, value);
-      i++;
-    }
-    console.log(keyObj);
+  compileText(node, text) {
+    const value = this.vm.$data[text];
+    this.updateView(node, value);
   },
-  updateView (node, value) {
+  updateView(node, value) {
     node.textContent = typeof value === 'undefined' ? '' : value;
   },
 };
