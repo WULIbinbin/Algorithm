@@ -41,6 +41,7 @@ export function observer(data) {
   if (!data || typeof data !== 'object') {
     return;
   }
+  console.log('当前监听属性', data);
   Object.keys(data).forEach((key) => {
     defineReactive(data, key, data[key]);
   });

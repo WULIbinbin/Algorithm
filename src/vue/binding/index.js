@@ -1,5 +1,4 @@
 import { observer } from './observer';
-import { Watcher } from './watcher';
 import { Compile } from './complie';
 
 export function Mvue(options) {

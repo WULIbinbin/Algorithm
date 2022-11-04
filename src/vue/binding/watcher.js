@@ -7,6 +7,7 @@ export function Watcher(vm, prop, callback) {
   this.prop = prop;
   this.callback = callback;
   this.value = this.get();
+  console.log(this)
 }
 
 Watcher.prototype = {

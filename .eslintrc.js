@@ -12,6 +12,7 @@ module.exports = {
     'no-shadow': 'off',
     'no-param-reassign': ['error', { props: false }],
     'no-console': 'off',
+    'no-new': 'off',
     'no-plusplus': [
       'error',
       {

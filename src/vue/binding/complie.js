@@ -1,3 +1,5 @@
+import { Watcher } from './watcher';
+
 // Compile 解析器
 // 用来解析指令初始化模板，一个是用来添加添加订阅者，绑定更新函数
 export function Compile(vm) {
@@ -14,6 +16,7 @@ Compile.prototype = {
   init() {
     this.fragment = this.nodeFragment(this.el);
     this.compileNode(this.fragment);
+    this.el.appendChild(this.fragment);
   },
   nodeFragment(el) {
     const fragment = document.createDocumentFragment();
@@ -29,13 +32,11 @@ Compile.prototype = {
     const { childNodes } = fragment;
     [...childNodes].forEach((node) => {
       const text = node.textContent;
-      console.log(text);
       if (this.isElementNode(node)) {
         this.compile(node); // 渲染指令模板
       } else if (this.isTextNode(node) && reg.test(text)) {
-        const ctx = text.match(reg)[1];
-        console.log(ctx);
-        this.compileText(node, ctx); // 渲染{{}} 模板
+        const prop = text.match(reg)[1];
+        this.compileText(node, prop); // 渲染{{}} 模板
       }
 
       // 递归编译子节点
@@ -45,9 +46,7 @@ Compile.prototype = {
     });
   },
   compile(node) {
-    console.log(node);
     const nodeAttrs = node.attributes;
-    console.log(nodeAttrs);
     [...nodeAttrs].forEach((attr) => {
       const { name } = attr;
       if (this.isDirective(name)) {
@@ -68,14 +67,32 @@ Compile.prototype = {
   isDirective(directive) {
     return directive.startsWith('v-');
   },
-  compileModel(node, value) {
-    console.log(node, value);
+  compileModel(node, prop) {
+    console.log('compileModel', node, prop);
+    const val = this.vm.$data[prop];
+    this.updateModel(node, val);
+    new Watcher(this.vm, prop, (value) => {
+      this.updateModel(node, value);
+    });
+    node.addEventListener('input', (e) => {
+      const newValue = e.target.value;
+      if (val === newValue) {
+        return;
+      }
+      this.vm.$data[prop] = newValue;
+    });
   },
-  compileText(node, text) {
-    const value = this.vm.$data[text];
-    this.updateView(node, value);
+  compileText(node, prop) {
+    const text = this.vm.$data[prop];
+    this.updateView(node, text);
+    new Watcher(this.vm, prop, (value) => {
+      this.updateView(node, value);
+    });
   },
   updateView(node, value) {
     node.textContent = typeof value === 'undefined' ? '' : value;
+  },
+  updateModel(node, value) {
+    node.value = typeof value === 'undefined' ? '' : value;
   },
 };
