@@ -7,11 +7,12 @@ export function Watcher(vm, prop, callback) {
   this.prop = prop;
   this.callback = callback;
   this.value = this.get();
-  console.log(this)
+  console.log(this);
 }
 
 Watcher.prototype = {
   update() {
+    // Dep做发布操作时会调用watcher.update
     const value = this.vm.$data[this.prop];
     const oldVal = this.value;
     if (value !== oldVal) {

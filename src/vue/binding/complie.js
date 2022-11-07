@@ -30,6 +30,7 @@ Compile.prototype = {
   },
   compileNode(fragment) {
     const { childNodes } = fragment;
+    // console.log([...childNodes]);
     [...childNodes].forEach((node) => {
       const text = node.textContent;
       if (this.isElementNode(node)) {
@@ -76,9 +77,6 @@ Compile.prototype = {
     });
     node.addEventListener('input', (e) => {
       const newValue = e.target.value;
-      if (val === newValue) {
-        return;
-      }
       this.vm.$data[prop] = newValue;
     });
   },

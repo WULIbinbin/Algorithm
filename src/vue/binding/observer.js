@@ -1,4 +1,5 @@
 export function Dep() {
+  this.target = null;
   this.subs = [];
 }
 
@@ -13,8 +14,6 @@ Dep.prototype.notify = function notify() {
   });
 };
 
-Dep.target = null;
-
 export function defineReactive(data, key, value) {
   // 递归调用，监听所有属性
   observer(value);
@@ -27,6 +26,7 @@ export function defineReactive(data, key, value) {
       return value;
     },
     set(newVal) {
+      console.log(value, newVal);
       if (value !== newVal) {
         value = newVal;
         dep.notify(); // 通知订阅器
