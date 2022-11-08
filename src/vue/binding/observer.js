@@ -36,7 +36,7 @@ export function defineReactive(data, key, value) {
 }
 
 // 监听器 Observer
-// 作用就是去监听传入对象的每一个属性
+// 使用 Object.defineProperty 去监听传入对象的每一个属性
 export function observer(data) {
   if (!data || typeof data !== 'object') {
     return;

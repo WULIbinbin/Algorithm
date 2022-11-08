@@ -2,15 +2,13 @@ import { Watcher } from './watcher';
 
 // Compile 解析器
 // 用来解析指令初始化模板，一个是用来添加添加订阅者，绑定更新函数
+const reg = /\{\{(.+?)\}\}/;
 export function Compile(vm) {
   this.vm = vm;
   this.el = vm.$el;
   this.fragment = null;
   this.init();
 }
-
-const reg = /\{\{(.+?)\}\}/;
-const reg2 = /\{\{(.*)\}\}/;
 
 Compile.prototype = {
   init() {
@@ -29,15 +27,15 @@ Compile.prototype = {
     return fragment;
   },
   compileNode(fragment) {
+    // 解析 dom 节点，如文本节点则用正则表达式匹配并解析模板字符串中 data 的变量
     const { childNodes } = fragment;
-    // console.log([...childNodes]);
     [...childNodes].forEach((node) => {
       const text = node.textContent;
       if (this.isElementNode(node)) {
         this.compile(node); // 渲染指令模板
       } else if (this.isTextNode(node) && reg.test(text)) {
         const prop = text.match(reg)[1];
-        this.compileText(node, prop); // 渲染{{}} 模板
+        this.compileText(node, prop); // 渲染 {{}} 模板
       }
 
       // 递归编译子节点
@@ -47,6 +45,7 @@ Compile.prototype = {
     });
   },
   compile(node) {
+    // 解析元素，用元素属性中提取 v-model
     const nodeAttrs = node.attributes;
     [...nodeAttrs].forEach((attr) => {
       const { name } = attr;
@@ -69,6 +68,8 @@ Compile.prototype = {
     return directive.startsWith('v-');
   },
   compileModel(node, prop) {
+    // 如果元素带 v-model，则绑定对应输入事件（如onInput）和 订阅者（watcher），
+    // 将输入值赋予 data 中
     console.log('compileModel', node, prop);
     const val = this.vm.$data[prop];
     this.updateModel(node, val);
@@ -81,6 +82,7 @@ Compile.prototype = {
     });
   },
   compileText(node, prop) {
+    // 绑定订阅者（watcher）
     const text = this.vm.$data[prop];
     this.updateView(node, text);
     new Watcher(this.vm, prop, (value) => {
