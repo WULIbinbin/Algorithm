@@ -7,12 +7,11 @@ export function Watcher(vm, prop, callback) {
   this.prop = prop;
   this.callback = callback;
   this.value = this.get();
-  console.log(this);
 }
 
 Watcher.prototype = {
   update() {
-    // Dep做发布操作时会调用watcher.update
+    // Dep 做发布操作时会调用 watcher.update
     const value = this.vm.$data[this.prop];
     const oldVal = this.value;
     if (value !== oldVal) {
@@ -21,8 +20,10 @@ Watcher.prototype = {
     }
   },
   get() {
-    Dep.target = this; // 储存订阅器
-    const value = this.vm.$data[this.prop]; // 因为属性被监听，这一步会执行监听器里的 get方法
+    // 储存订阅器
+    Dep.target = this;
+    // 因为 data 中的属性被 Object.defineProperty 监听，这一步会执行监听器里的 get 方法
+    const value = this.vm.$data[this.prop];
     Dep.target = null;
     return value;
   },
