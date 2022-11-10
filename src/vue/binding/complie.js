@@ -69,13 +69,13 @@ Compile.prototype = {
   },
   compileModel(node, prop) {
     // 如果元素带 v-model，则绑定对应输入事件（如onInput）和 订阅者（watcher），
-    // 将输入值赋予 data 中
     console.log('compileModel', node, prop);
     const val = this.vm.$data[prop];
     this.updateModel(node, val);
     new Watcher(this.vm, prop, (value) => {
       this.updateModel(node, value);
     });
+    // 将输入值赋予 data 中
     node.addEventListener('input', (e) => {
       const newValue = e.target.value;
       this.vm.$data[prop] = newValue;
