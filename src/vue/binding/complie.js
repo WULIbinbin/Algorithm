@@ -2,6 +2,7 @@ import { Watcher } from './watcher';
 
 // Compile 解析器
 // 用来解析指令初始化模板，一个是用来添加添加订阅者，绑定更新函数
+// /\{\{((?:.|\r?\n)+?)\}\}/g;
 const reg = /\{\{(.+?)\}\}/;
 export function Compile(vm) {
   this.vm = vm;
@@ -34,6 +35,7 @@ Compile.prototype = {
       if (this.isElementNode(node)) {
         this.compile(node); // 渲染指令模板
       } else if (this.isTextNode(node) && reg.test(text)) {
+        console.log(text.match(reg));
         const prop = text.match(reg)[1];
         this.compileText(node, prop); // 渲染 {{}} 模板
       }

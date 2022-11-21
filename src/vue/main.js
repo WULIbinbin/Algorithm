@@ -4,9 +4,14 @@ const vm = new Mvue({
   el: '#app',
   data() {
     return {
-      name: '',
-      sex: '',
+      num1: '',
+      num2: '',
     };
+  },
+  computed: {
+    reduce() {
+      return this.num1 + this.num2;
+    },
   },
 });
 

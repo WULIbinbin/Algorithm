@@ -1,4 +1,4 @@
-import { Dep } from './observer';
+import { Dep } from './dep';
 
 // 订阅者 Watcher
 // 接受属性变化的通知，然后去执行更新函数去更新视图
