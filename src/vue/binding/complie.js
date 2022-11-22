@@ -1,4 +1,5 @@
 import { Watcher } from './watcher';
+import { hasProperty } from './utils';
 
 // Compile 解析器
 // 用来解析指令初始化模板，一个是用来添加添加订阅者，绑定更新函数
@@ -35,7 +36,6 @@ Compile.prototype = {
       if (this.isElementNode(node)) {
         this.compile(node); // 渲染指令模板
       } else if (this.isTextNode(node) && reg.test(text)) {
-        console.log(text.match(reg));
         const prop = text.match(reg)[1];
         this.compileText(node, prop); // 渲染 {{}} 模板
       }
@@ -72,7 +72,7 @@ Compile.prototype = {
   compileModel(node, prop) {
     // 如果元素带 v-model，则绑定对应输入事件（如onInput）和 订阅者（watcher），
     console.log('compileModel', node, prop);
-    const val = this.vm.$data[prop];
+    const val = this.vm[prop];
     this.updateModel(node, val);
     new Watcher(this.vm, prop, (value) => {
       this.updateModel(node, value);
@@ -80,14 +80,21 @@ Compile.prototype = {
     // 将输入值赋予 data 中
     node.addEventListener('input', (e) => {
       const newValue = e.target.value;
-      this.vm.$data[prop] = newValue;
+      this.vm[prop] = newValue;
     });
   },
   compileText(node, prop) {
     // 绑定订阅者（watcher）
-    const text = this.vm.$data[prop];
+    let text = '';
+    // if (hasProperty(this.vm.$data, prop)) {
+    //   text = this.vm[prop];
+    // } else if (hasProperty(this.vm.$computed, prop)) {
+    //   text = this.vm[prop];
+    // }
+    text = this.vm[prop];
     this.updateView(node, text);
     new Watcher(this.vm, prop, (value) => {
+      console.log(prop, value);
       this.updateView(node, value);
     });
   },

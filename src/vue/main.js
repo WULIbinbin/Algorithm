@@ -10,6 +10,7 @@ const vm = new Mvue({
   },
   computed: {
     reduce() {
+      console.log('reduce', this);
       return this.num1 + this.num2;
     },
   },
