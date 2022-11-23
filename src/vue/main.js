@@ -5,13 +5,14 @@ const vm = new Mvue({
   data() {
     return {
       num1: '',
+      num3: '333',
       num2: '',
     };
   },
   computed: {
     reduce() {
-      console.log('reduce', this);
-      return this.num1 + this.num2;
+      console.log('reduce计算了', this);
+      return Number(this.num1) + Number(this.num2)
     },
   },
 });

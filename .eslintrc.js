@@ -1,12 +1,14 @@
 module.exports = {
   root: true,
-  extends: ['airbnb-base', 'prettier'],
+  extends: ['prettier'],
   plugins: ['eslint-plugin-prettier'],
   // parser: '@typescript-eslint/parser',
   env: {
     jest: true,
   },
   rules: {
+    parser: 'babel-eslint',
+    'consistent-return': 'off',
     'no-use-before-define': 'off',
     'no-unused-vars': 'off',
     'no-shadow': 'off',

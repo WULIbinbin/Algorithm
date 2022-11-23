@@ -10,6 +10,7 @@ export function initState(vm) {
   while (i--) {
     // 从this上读取的数据全部拦截到this._data到里面读取
     // 例如 this.name 等同于  this._data.name
+    // 以至于 data.prop 有唯一对应的 depId
     proxy(vm, '_data', keys[i]);
   }
   observe(data); // 数据观察
@@ -24,11 +25,11 @@ function observe(data) {
 }
 
 // 从this上读取的数据全部拦截到this._data到里面读取
-// 例如 this.name 等同于  this._data.name
+// this._data里的key绑定到this上
 function proxy(vm, source, key) {
   Object.defineProperty(vm, key, {
     get() {
-      return vm[source][key]; // this.name 等同于  this._data.name
+      return vm[source][key];
     },
     set(newValue) {
       return (vm[source][key] = newValue);
@@ -40,6 +41,7 @@ export function defineReactive(data, key, value) {
   const dep = new Dep();
   Object.defineProperty(data, key, {
     get() {
+      console.log(`defineProperty:::::::::，我监听的是${key}`, dep, Dep.target);
       if (Dep.target) {
         dep.depend();
       }

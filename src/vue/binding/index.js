@@ -9,16 +9,10 @@ export function Mvue(options) {
   this.$computed = options.computed;
   this.$el = document.querySelector(options.el);
   this.init();
-  this.$mount();
 }
 
 Mvue.prototype.init = function init() {
   if (this.$data) initState(this);
-  if (this.$computed) initComputed(this, this.$computed);
+  if (this.$computed) initComputed(this);
   new Compile(this);
-};
-
-Mvue.prototype.$mount = function mount() {
-  const vm = this;
-  new Watcher(vm, vm.$el, () => {}, true);
 };

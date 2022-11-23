@@ -3,6 +3,7 @@
 let uid = 0;
 export class Dep {
   constructor() {
+    // 每个 data.prop 都有唯一对应的 depId
     this.id = uid++;
     this.subs = [];
   }
@@ -10,11 +11,11 @@ export class Dep {
   // 添加订阅者
   addSub(watcher) {
     this.subs.push(watcher);
+    // console.log('添加了订阅者', this.subs, watcher);
   }
   // 通知订阅者
   notify() {
     console.log('属性变化通知 Watcher 执行更新视图函数');
-    console.log(this.subs)
     this.subs.forEach((watcher) => {
       watcher.update();
     });

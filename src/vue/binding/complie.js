@@ -15,6 +15,7 @@ export function Compile(vm) {
 Compile.prototype = {
   init() {
     this.fragment = this.nodeFragment(this.el);
+    this.el.innerHtml = ''
     this.compileNode(this.fragment);
     this.el.appendChild(this.fragment);
   },
@@ -71,7 +72,7 @@ Compile.prototype = {
   },
   compileModel(node, prop) {
     // 如果元素带 v-model，则绑定对应输入事件（如onInput）和 订阅者（watcher），
-    console.log('compileModel', node, prop);
+    // console.log('compileModel', node, prop);
     const val = this.vm[prop];
     this.updateModel(node, val);
     new Watcher(this.vm, prop, (value) => {
@@ -85,16 +86,9 @@ Compile.prototype = {
   },
   compileText(node, prop) {
     // 绑定订阅者（watcher）
-    let text = '';
-    // if (hasProperty(this.vm.$data, prop)) {
-    //   text = this.vm[prop];
-    // } else if (hasProperty(this.vm.$computed, prop)) {
-    //   text = this.vm[prop];
-    // }
-    text = this.vm[prop];
+    let text = this.vm[prop];
     this.updateView(node, text);
     new Watcher(this.vm, prop, (value) => {
-      console.log(prop, value);
       this.updateView(node, value);
     });
   },
