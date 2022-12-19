@@ -36,7 +36,7 @@ export class Watcher {
   get() {
     // 储存订阅器
     Dep.target = this;
-    console.warn('要储存的订阅器', this);
+    console.warn('要储存的订阅器Dep.target是', this);
     pushTarget(this);
     const vm = this.vm;
     // 因为 data 和 computed 中的属性/函数被 Object.defineProperty 监听，这一步会执行监听器里的 get 方法

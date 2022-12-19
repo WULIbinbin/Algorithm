@@ -1,18 +1,19 @@
-import { initState } from './observer';
+import { initData } from './observer';
 import { initComputed } from './computed';
-import { Watcher } from './watcher';
+import { initWatch } from './watch';
 import { Compile } from './complie';
 
-export function Mvue(options) {
-  this.$options = options;
-  this.$data = options.data && options.data();
-  this.$computed = options.computed;
-  this.$el = document.querySelector(options.el);
-  this.init();
+export function Mvue(opts) {
+  this.$options = opts;
+  this.$data = opts.data && opts.data();
+  this.$computed = opts.computed;
+  this.$el = document.querySelector(opts.el);
+  this.initState(opts);
 }
 
-Mvue.prototype.init = function init() {
-  if (this.$data) initState(this);
+Mvue.prototype.initState = function initState(opts) {
+  if (this.$data) initData(this);
   if (this.$computed) initComputed(this);
+  if (opts.watch) initWatch(this, opts.watch);
   new Compile(this);
 };

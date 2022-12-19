@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { Dep } from './dep';
 
-export function initState(vm) {
+export function initData(vm) {
   let data = vm.$options.data; // 拿到配置的data属性值
   // 判断data是函数还是别的类型
   data = vm._data = typeof data === 'function' ? data.call(vm, vm) : data || {};
