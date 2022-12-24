@@ -1,2 +1,2 @@
-#### Algorithms and data structures implemented in javascript
+#### Javascript practice and demo
 ----
