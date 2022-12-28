@@ -39,9 +39,11 @@ function proxy(vm, source, key) {
 
 export function defineReactive(data, key, value) {
   const dep = new Dep();
+  // 递归调用，监听所有属性
+  observe(value);
   Object.defineProperty(data, key, {
     get() {
-      console.log(`defineProperty:::::::::，我监听的是${key}`, dep, Dep.target);
+      console.log(`defineProperty:::::::::正在监听的是${key}`, dep, Dep.target);
       if (Dep.target) {
         dep.depend();
       }
@@ -49,14 +51,11 @@ export function defineReactive(data, key, value) {
     },
     set(newVal) {
       if (value !== newVal) {
-        observe(newVal); // 给新的值设置响应式
         value = newVal;
         dep.notify(); // 通知订阅器
       }
     },
   });
-  // 递归调用，监听所有属性
-  observe(value);
 }
 
 // 监听器 Observer

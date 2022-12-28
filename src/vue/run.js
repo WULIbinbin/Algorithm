@@ -1,4 +1,4 @@
-import Mvue from './instance/index';
+import Mvue from './index';
 
 const vm = new Mvue({
   el: '#app',

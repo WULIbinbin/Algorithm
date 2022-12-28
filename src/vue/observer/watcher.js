@@ -4,7 +4,7 @@ import { isFunction, noop, parsePath } from '../utils/index.js';
 // 订阅者 Watcher
 // 接受属性变化的通知，然后去执行更新函数去更新视图
 export class Watcher {
-  constructor(vm, prop, callback, options = {}) {
+  constructor(vm, prop, callback) {
     this.vm = vm;
     this.prop = prop;
     this.callback = callback;
@@ -15,6 +15,7 @@ export class Watcher {
     } else {
       // data.prop转为函数
       this.getter = parsePath(this.prop);
+      console.log(this.getter)
       if (!this.getter) {
         this.getter = noop;
       }
@@ -29,6 +30,7 @@ export class Watcher {
     const oldVal = this.value;
     if (value !== oldVal) {
       this.value = value;
+      console.warn(`触发了${this.prop}的watcher的回调`)
       this.callback(value);
     }
   }
@@ -36,7 +38,7 @@ export class Watcher {
   get() {
     // 储存订阅器
     Dep.target = this;
-    console.warn('要储存的订阅器是', this);
+    console.warn('要储存/访问的订阅器是', this);
     pushTarget(this);
     const vm = this.vm;
     // 因为 data 和 computed 中的属性/函数被 Object.defineProperty 监听，这一步会执行监听器里的 get 方法
@@ -48,10 +50,11 @@ export class Watcher {
 
   addDep(dep) {
     const id = dep.id;
+    console.warn(id, this.depIds.has(id),dep);
     if (!this.depIds.has(id)) {
       this.depIds.add(id);
       this.deps.push(dep);
-      // 当前watcher添加到订阅器
+      // 订阅器收集当前的订阅者watcher
       dep.addSub(this);
     }
   }
@@ -61,7 +64,7 @@ export class Watcher {
   }
 
   depend() {
-    console.warn('wacther depend', this.deps, this);
+    console.warn('wacther.depend', this.deps, this);
     // 从 computedGetter 里调用 computed 的订阅器，当前 computed 订阅器中 deps 已经包含了依赖的 data.prop 的订阅器，
     // 然后对应的 data.prop 的订阅器也去添加 computed 的订阅者
     let i = this.deps.length;

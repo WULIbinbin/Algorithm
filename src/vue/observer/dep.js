@@ -21,6 +21,7 @@ export class Dep {
   }
 
   depend() {
+    console.warn('dep.depend', Dep.target, this);
     if (Dep.target) {
       Dep.target.addDep(this);
     }

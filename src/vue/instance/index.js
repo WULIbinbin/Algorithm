@@ -1,19 +1,9 @@
-import { initData } from '../observer/index';
-import { initComputed } from './computed';
-import { initWatch } from './watch';
-import { Compile } from './complie';
+import { initState } from './state';
 
-export default function Mvue(opts) {
+export default function MyVue(opts) {
   this.$options = opts;
   this.$data = opts.data && opts.data();
   this.$computed = opts.computed;
   this.$el = document.querySelector(opts.el);
-  this.initState(opts);
+  initState(this, opts);
 }
-
-Mvue.prototype.initState = function initState(opts) {
-  if (this.$data) initData(this);
-  if (this.$computed) initComputed(this);
-  if (opts.watch) initWatch(this, opts.watch);
-  new Compile(this);
-};
