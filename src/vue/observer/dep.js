@@ -8,23 +8,29 @@ export class Dep {
     this.subs = [];
   }
 
-  // 添加订阅者
+  // 收集依赖项（订阅者）
   addSub(watcher) {
+    console.warn(`Dep${this.id}要收集的依赖项：`, watcher);
     this.subs.push(watcher);
   }
-  // 通知订阅者
-  notify() {
-    console.log('属性变化通知 Watcher 执行更新视图函数');
-    this.subs.forEach((watcher) => {
-      watcher.update();
-    });
+
+  removeSub(sub) {
+    this.subs[this.subs.indexOf(sub)] = null;
   }
 
   depend() {
-    console.warn('dep.depend', Dep.target, this);
     if (Dep.target) {
       Dep.target.addDep(this);
     }
+  }
+
+   // 通知订阅者
+   notify() {
+    console.log('属性变化通知 Watcher 执行更新视图函数');
+    const subs = this.subs.filter((s) => s);
+    subs.forEach((watcher) => {
+      watcher.update();
+    });
   }
 }
 

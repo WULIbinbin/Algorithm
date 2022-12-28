@@ -1,62 +1,86 @@
-import { Dep, pushTarget, popTarget } from './dep';
+import { pushTarget, popTarget } from './dep';
 import { isFunction, noop, parsePath } from '../utils/index.js';
 
 // 订阅者 Watcher
 // 接受属性变化的通知，然后去执行更新函数去更新视图
 export class Watcher {
-  constructor(vm, prop, callback) {
+  constructor(vm, prop, cb) {
     this.vm = vm;
     this.prop = prop;
-    this.callback = callback;
+    this.cb = cb;
     this.deps = [];
+    this.newDeps = [];
     this.depIds = new Set();
+    this.newDepIds = new Set();
     if (isFunction(prop)) {
       this.getter = prop;
     } else {
       // data.prop转为函数
       this.getter = parsePath(this.prop);
-      console.log(this.getter)
       if (!this.getter) {
         this.getter = noop;
       }
     }
-    console.log(`初始化Watcher----->来源于：${this.prop} \n`, this);
+    console.warn(`创建依赖项Watcher----->来源于：${isFunction(this.prop) ? `${this.prop.name}()` : this.prop} \n`, this);
     this.value = this.get();
   }
 
   update() {
     // Dep 做发布操作时会调用 watcher.update
     const value = this.get();
-    const oldVal = this.value;
-    if (value !== oldVal) {
+    if (value !== this.value) {
+      const oldVal = this.value;
       this.value = value;
-      console.warn(`触发了${this.prop}的watcher的回调`)
-      this.callback(value);
+      console.warn(`触发了${this.prop}的watcher的回调`);
+      this.cb.call(this.vm, value, oldVal);
     }
   }
 
   get() {
-    // 储存订阅器
-    Dep.target = this;
-    console.warn('要储存/访问的订阅器是', this);
+    // 评估getter，重新收集依赖项（订阅器）
     pushTarget(this);
+    let value;
     const vm = this.vm;
-    // 因为 data 和 computed 中的属性/函数被 Object.defineProperty 监听，这一步会执行监听器里的 get 方法
-    let value = this.getter.call(vm, vm);
-    popTarget();
-    Dep.target = null;
+    try {
+      // 因为 data 和 computed 中的属性/函数被 Object.defineProperty 监听，这一步会执行监听器里的 get 方法
+      value = this.getter.call(vm, vm);
+    } catch (e) {
+      throw e;
+    } finally {
+      popTarget();
+      this.cleanupDeps();
+    }
     return value;
   }
 
+  // 收集依赖项（订阅者）
   addDep(dep) {
     const id = dep.id;
-    console.warn(id, this.depIds.has(id),dep);
-    if (!this.depIds.has(id)) {
-      this.depIds.add(id);
-      this.deps.push(dep);
-      // 订阅器收集当前的订阅者watcher
-      dep.addSub(this);
+    if (!this.newDepIds.has(id)) {
+      this.newDepIds.add(id);
+      this.newDeps.push(dep);
+      if (!this.depIds.has(id)) {
+        dep.addSub(this);
+      }
     }
+  }
+
+  cleanupDeps() {
+    let i = this.deps.length;
+    while (i--) {
+      const dep = this.deps[i];
+      if (!this.newDepIds.has(dep.id)) {
+        dep.removeSub(this);
+      }
+    }
+    let tmp = this.depIds;
+    this.depIds = this.newDepIds;
+    this.newDepIds = tmp;
+    this.newDepIds.clear();
+    tmp = this.deps;
+    this.deps = this.newDeps;
+    this.newDeps = tmp;
+    this.newDeps.length = 0;
   }
 
   evaluate() {

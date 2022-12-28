@@ -1,10 +1,23 @@
 /* eslint-disable */
-import { Dep } from './dep';
+import { isFunction } from '../utils/index';
+import { Dep, pushTarget, popTarget } from './dep';
+
+export function getData(data, vm) {
+  pushTarget();
+  try {
+    return data.call(vm, vm);
+  } catch (e) {
+    console.warn('data must be an Function');
+    return {};
+  } finally {
+    popTarget();
+  }
+}
 
 export function initData(vm) {
   let data = vm.$options.data; // 拿到配置的data属性值
   // 判断data是函数还是别的类型
-  data = vm._data = typeof data === 'function' ? data.call(vm, vm) : data || {};
+  data = vm._data = isFunction(data) ? getData(data, vm) : data || {};
   const keys = Object.keys(data);
   let i = keys.length;
   while (i--) {
@@ -43,7 +56,7 @@ export function defineReactive(data, key, value) {
   observe(value);
   Object.defineProperty(data, key, {
     get() {
-      console.log(`defineProperty:::::::::正在监听的是${key}`, dep, Dep.target);
+      // console.log(`defineProperty:::::::::正在监听的是${key}`, dep, Dep.target);
       if (Dep.target) {
         dep.depend();
       }
