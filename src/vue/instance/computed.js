@@ -1,7 +1,7 @@
 /* eslint-disable */
-import { Watcher } from './watcher';
-import { Dep } from './dep';
-import { noop } from './utils';
+import { Watcher } from '../observer/watcher';
+import { Dep } from '../observer/dep';
+import { noop } from '../utils/index';
 
 const sharedPropertyDefinition = {
   enumerable: true,

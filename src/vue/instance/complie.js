@@ -1,5 +1,4 @@
-import { Watcher } from './watcher';
-import { hasProperty } from './utils';
+import { Watcher } from '../observer/watcher';
 
 // Compile 解析器
 // 用来解析指令初始化模板，一个是用来添加添加订阅者，绑定更新函数

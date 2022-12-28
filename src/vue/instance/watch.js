@@ -1,5 +1,5 @@
-import { Watcher } from './watcher';
-import { isPlainObject } from './utils';
+import { Watcher } from '../observer/watcher';
+import { isPlainObject } from '../utils/index';
 
 export function initWatch(vm, watch) {
   for (const key in watch) {

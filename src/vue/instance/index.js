@@ -1,9 +1,9 @@
-import { initData } from './observer';
+import { initData } from '../observer/index';
 import { initComputed } from './computed';
 import { initWatch } from './watch';
 import { Compile } from './complie';
 
-export function Mvue(opts) {
+export default function Mvue(opts) {
   this.$options = opts;
   this.$data = opts.data && opts.data();
   this.$computed = opts.computed;

@@ -1,4 +1,4 @@
-import { Mvue } from './binding/index';
+import Mvue from './instance/index';
 
 const vm = new Mvue({
   el: '#app',

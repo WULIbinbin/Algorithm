@@ -11,7 +11,6 @@ export class Dep {
   // 添加订阅者
   addSub(watcher) {
     this.subs.push(watcher);
-    // console.log('添加了订阅者', this.subs, watcher);
   }
   // 通知订阅者
   notify() {

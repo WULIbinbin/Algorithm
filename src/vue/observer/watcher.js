@@ -1,5 +1,5 @@
 import { Dep, pushTarget, popTarget } from './dep';
-import { isFunction, noop, parsePath } from './utils';
+import { isFunction, noop, parsePath } from '../utils/index.js';
 
 // 订阅者 Watcher
 // 接受属性变化的通知，然后去执行更新函数去更新视图
@@ -36,7 +36,7 @@ export class Watcher {
   get() {
     // 储存订阅器
     Dep.target = this;
-    console.warn('要储存的订阅器Dep.target是', this);
+    console.warn('要储存的订阅器是', this);
     pushTarget(this);
     const vm = this.vm;
     // 因为 data 和 computed 中的属性/函数被 Object.defineProperty 监听，这一步会执行监听器里的 get 方法
@@ -49,7 +49,6 @@ export class Watcher {
   addDep(dep) {
     const id = dep.id;
     if (!this.depIds.has(id)) {
-      // console.warn('谁要添加到订阅器', this, id, this.depIds, dep);
       this.depIds.add(id);
       this.deps.push(dep);
       // 当前watcher添加到订阅器
