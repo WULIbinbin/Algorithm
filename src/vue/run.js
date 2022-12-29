@@ -25,6 +25,11 @@ const vm = new Mvue({
       },
     },
   },
+  methods: {
+    handleAdd() {
+      this.num1 = Number(this.num1) + 1;
+    },
+  },
 });
 
 window.vm = vm;

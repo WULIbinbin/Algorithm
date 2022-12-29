@@ -14,7 +14,7 @@ export function Compile(vm) {
 Compile.prototype = {
   init() {
     this.fragment = this.nodeFragment(this.el);
-    this.el.innerHtml = ''
+    this.el.innerHtml = '';
     this.compileNode(this.fragment);
     this.el.appendChild(this.fragment);
   },
@@ -50,14 +50,16 @@ Compile.prototype = {
     // 解析元素，用元素属性中提取 v-model
     const nodeAttrs = node.attributes;
     [...nodeAttrs].forEach((attr) => {
-      const { name } = attr;
+      const { name, value } = attr;
       if (this.isDirective(name)) {
-        const { value } = attr;
         if (name === 'v-model') {
           this.compileModel(node, value);
         }
-        node.removeAttribute(name);
       }
+      if (this.isHandler(name)) {
+        this.compileHandler(node, name, value);
+      }
+      node.removeAttribute(name);
     });
   },
   isElementNode(node) {
@@ -68,6 +70,14 @@ Compile.prototype = {
   },
   isDirective(directive) {
     return directive.startsWith('v-');
+  },
+  isHandler(handler) {
+    return handler.startsWith('@');
+  },
+  compileHandler(node, eventType, eventName) {
+    if (eventType === '@click') {
+      node.addEventListener('click', this.vm[eventName], false);
+    }
   },
   compileModel(node, prop) {
     // 如果元素带 v-model，则绑定对应输入事件（如onInput）和 订阅者（watcher），
