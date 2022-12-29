@@ -7,6 +7,9 @@ const vm = new Mvue({
       num1: '',
       num3: '333',
       num2: '',
+      student:{
+        name:'binbin'
+      }
     };
   },
   computed: {
@@ -24,6 +27,11 @@ const vm = new Mvue({
         console.log('num2', val);
       },
     },
+    'student.name':{
+      handler(val) {
+        console.log('student.name的watch', val);
+      },
+    }
   },
   methods: {
     handleAdd() {
@@ -33,5 +41,3 @@ const vm = new Mvue({
 });
 
 window.vm = vm;
-
-console.log(vm);

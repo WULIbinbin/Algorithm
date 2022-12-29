@@ -51,3 +51,23 @@ export function toArray(list = [], start = 0) {
   }
   return ret;
 }
+
+export function _set(object, path, value) {
+  if (!isPlainObject(object)) return object;
+  path = path.split('.');
+
+  let index = -1,
+    len = path.length,
+    lastIndex = len - 1,
+    nested = object;
+
+  while (++index < len) {
+    const key = path[index];
+    if (lastIndex === index) {
+      nested[key] = value;
+    }
+    nested = nested[key];
+  }
+
+  return object;
+}

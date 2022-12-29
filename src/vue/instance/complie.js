@@ -1,4 +1,5 @@
 import { Watcher } from '../observer/watcher';
+import { parsePath, _set } from '../utils/index';
 
 // Compile 解析器
 // 用来解析指令初始化模板，一个是用来添加添加订阅者，绑定更新函数
@@ -82,20 +83,23 @@ Compile.prototype = {
   compileModel(node, prop) {
     // 如果元素带 v-model，则绑定对应输入事件（如onInput）和 订阅者（watcher），
     // console.log('compileModel', node, prop);
-    const val = this.vm[prop];
+    // parsePath处理对象属性路径
+    const val = parsePath(prop)(this.vm);
     this.updateModel(node, val);
     new Watcher(this.vm, prop, (value) => {
+      console.log(prop, value);
       this.updateModel(node, value);
     });
     // 将输入值赋予 data 中
     node.addEventListener('input', (e) => {
       const newValue = e.target.value;
-      this.vm[prop] = newValue;
+      // 根据对象属性路径设置值
+      _set(this.vm, prop, newValue);
     });
   },
   compileText(node, prop) {
     // 绑定订阅者（watcher）
-    let text = this.vm[prop];
+    let text = parsePath(prop)(this.vm);
     this.updateView(node, text);
     new Watcher(this.vm, prop, (value) => {
       this.updateView(node, value);

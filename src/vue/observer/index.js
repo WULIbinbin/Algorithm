@@ -56,7 +56,7 @@ export function defineReactive(data, key, value) {
   observe(value);
   Object.defineProperty(data, key, {
     get() {
-      // console.log(`defineProperty:::::::::正在监听的是${key}`, dep, Dep.target);
+      console.log(`defineProperty:::::::::正在监听的是${key}`, dep, Dep.target);
       if (Dep.target) {
         dep.depend();
       }
@@ -66,6 +66,7 @@ export function defineReactive(data, key, value) {
       if (value !== newVal) {
         value = newVal;
         dep.notify(); // 通知订阅器
+        observe(value)
       }
     },
   });
