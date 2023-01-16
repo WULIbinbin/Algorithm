@@ -19,3 +19,17 @@ String.prototype.render = function (obj) {
   const fn = new Function(...keys, str);
   return fn(...values);
 };
+
+// 使用正则
+String.prototype.render2 = function (obj) {
+  const str = this;
+  const reg = /\${([.\w]+)}/g;
+  return str.replace(reg, (match, p1) => {
+    const keys = p1?.split('.');
+    let value = obj;
+    keys.forEach((key) => {
+      value = value[key];
+    });
+    return value;
+  });
+};

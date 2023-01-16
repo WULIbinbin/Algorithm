@@ -11,3 +11,5 @@ const employee = {
 };
 const result = greeting.render(employee);
 console.log(result);
+const result1 = greeting.render2(employee);
+console.log(result1);
