@@ -11,7 +11,7 @@
 // var result = greeting.render(employee);
 // console.log(result);
 
-// ES6 new Function 构建新的函数
+// ES6 new Function 构建新的函数（类似eval）
 String.prototype.render = function (obj) {
   const str = `return \`${this}\``; // 多加一层``，防止变量提前解析
   const keys = Object.keys(obj);
