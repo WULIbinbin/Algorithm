@@ -1,5 +1,7 @@
 import { isTypeOf } from '../../utils/tools';
 
+// 实现promise
+
 /**
  *  Promise对象解析
  *
