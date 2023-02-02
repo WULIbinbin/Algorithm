@@ -13,8 +13,9 @@ binaryTree.insert(3);
 
 console.log(binaryTree.root);
 
-console.log(binaryTree.preOrderTraverse());
-console.log(binaryTree.inOrderTraverse());
+console.log('先序遍历',binaryTree.preOrderTraverse());
+console.log('中序遍历',binaryTree.inOrderTraverse());
+console.log('后序遍历',binaryTree.postOrderTraverse());
 
 console.log(binaryTree.getMin(), binaryTree.getMax());
 console.log(binaryTree.search(11), binaryTree.search(21));
