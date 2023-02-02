@@ -1,4 +1,4 @@
-import promise from './promise';
+import promise from './index';
 
 export const MyPromise = promise;
 
@@ -50,7 +50,7 @@ export const MyPromise = promise;
 // const reject1 = Promise.reject(new Error(31));
 // const reject2 = Promise.reject(new Error(32));
 
-// const resolve1 = MyPromise.resolve(1);
+const resolve1 = MyPromise.resolve(1);
 // const reject1 = MyPromise.reject(new Error(31));
 // const reject2 = MyPromise.reject(new Error(32));
 
@@ -65,16 +65,16 @@ export const MyPromise = promise;
 //     },
 //   );
 
-// resolve1
-//   .then((res) => 2)
-//   .then(
-//     (res) => {
-//       console.log('res2_2', res);
-//     },
-//     (err) => {
-//       console.log('err2_2', err);
-//     },
-//   );
+resolve1
+  .then((res) => 2)
+  .then(
+    (res) => {
+      console.log('res2_2', res);
+    },
+    (err) => {
+      console.log('err2_2', err);
+    },
+  );
 
 // MyPromise.resolve()
 //   .then(() => {

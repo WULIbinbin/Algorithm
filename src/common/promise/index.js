@@ -85,8 +85,10 @@ MyPromise.prototype.then = function then(onFulfilled, onRejected) {
       // 创建一个微任务等待 newPromise 完成初始化
       // setTimeout 模拟 queueMicrotask 微任务
       // 作用：由于 resolvePromise 需要拿到 MyPromise 完成初次化后的 newPromise 变量，
-      // 来判断 then 返回值是否为 newPromise 本身，必须要创建新的任务，去等待 -
-      // MyPromise 初始化完成后再去调用。
+      // 来判断 then 返回值是否为 newPromise 本身，
+      // 因为 newPromise 初始化前无法访问，所以必须要创建新的微任务，
+      // 等待 newPromise 初始化完毕后才调用resolvePromise
+      // 否则报错 ReferenceError: Cannot access 'newPromise' before initialization，
       // PromiseA+ 2.2.4 --- setTimeout
       setTimeout(() => {
         try {

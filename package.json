@@ -10,9 +10,9 @@
     "lint": "eslint ./src --ext js,jsx",
     "lint:fix": "eslint ./src --ext js,jsx --fix",
     "prepare": "husky install",
-    "build:promise": "vite build -c ./vite.promise.output.js",
-    "test:promise": " pnpm run build:promise && promises-aplus-tests text-promise.js",
-    "build:myvue": "vite build -c ./vite.myvue.output.js"
+    "build:promise": "vite build -c ./scripts/output/vite.promise.output.js",
+    "test:promise": " pnpm run build:promise && promises-aplus-tests ./scripts/test/text-promise.js",
+    "build:myvue": "vite build -c ./scripts/output/vite.myvue.output.js"
   },
   "author": "WULIbinbin",
   "license": "ISC",
