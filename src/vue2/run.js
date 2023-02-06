@@ -1,10 +1,22 @@
 import Mvue from './main/index';
 import Vuex from './vuex/index';
-console.log(Mvue.use);
-console.log(Vuex);
+
+// const store = new Vuex.Store(
+//   {
+//     state: {
+//       count: 0,
+//     },
+//   },
+//   Mvue,
+// );
+
+Mvue.use(Vuex)
+
+console.log(Mvue.prototype);
 
 const vm = new Mvue({
   el: '#app',
+  // store,
   data() {
     return {
       num1: '',
@@ -36,8 +48,8 @@ const vm = new Mvue({
       },
     },
   },
-  created(){
-    console.log('lifecycle created',this)
+  created() {
+    console.log('lifecycle created', this);
   },
   methods: {
     handleAdd() {

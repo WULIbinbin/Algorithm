@@ -6,7 +6,7 @@ import { Compile } from './complie';
 import { callHook } from './lifecycle';
 
 export function initState(vm, opts) {
-  callHook(vm, 'beforeCreate');
+  callHook(vm, 'beforeCreate',[vm]);
   if (vm.$data) initData(vm);
   if (vm.$computed) initComputed(vm);
   if (opts.watch) initWatch(vm, opts.watch);

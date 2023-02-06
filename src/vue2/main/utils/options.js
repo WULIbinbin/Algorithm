@@ -1,4 +1,4 @@
-import { isFunction } from './index';
+import { isFunction, hasOwn } from './index';
 
 /**
  * Default strategy.
@@ -6,6 +6,8 @@ import { isFunction } from './index';
 const defaultStrat = function (parentVal, childVal) {
   return childVal === undefined ? parentVal : childVal;
 };
+
+const strats = Object.create(null)
 
 export function mergeOptions(parent = {}, child = {}, vm = null) {
   if (isFunction(child)) {
