@@ -56,7 +56,7 @@ export function defineReactive(data, key, value) {
   observe(value);
   Object.defineProperty(data, key, {
     get() {
-      console.log(`defineProperty:::::::::正在监听的是${key}`, dep, Dep.target);
+      // console.log(`defineProperty:::::::::正在监听的是${key}`, dep, Dep.target);
       if (Dep.target) {
         dep.depend();
       }
@@ -76,7 +76,7 @@ export function defineReactive(data, key, value) {
 // 使用 Object.defineProperty 去监听传入对象的每一个属性
 export class Observer {
   constructor(data) {
-    console.log('当前监听属性', data);
+    // console.log('当前监听属性', data);
     Object.keys(data).forEach((key) => {
       defineReactive(data, key, data[key]);
     });

@@ -21,7 +21,7 @@ export class Watcher {
         this.getter = noop;
       }
     }
-    console.warn(`创建依赖项Watcher----->来源于：${isFunction(this.prop) ? `${this.prop.name}()` : this.prop} \n`, this);
+    // console.warn(`创建依赖项Watcher----->来源于：${isFunction(this.prop) ? `${this.prop.name}()` : this.prop} \n`, this);
     this.value = this.get();
   }
 
@@ -31,7 +31,7 @@ export class Watcher {
     if (value !== this.value) {
       const oldVal = this.value;
       this.value = value;
-      console.warn(`触发了${this.prop}的watcher的回调`);
+      // console.warn(`触发了${this.prop}的watcher的回调`);
       this.cb.call(this.vm, value, oldVal);
     }
   }
@@ -88,7 +88,7 @@ export class Watcher {
   }
 
   depend() {
-    console.warn('wacther.depend', this.deps, this);
+    // console.warn('wacther.depend', this.deps, this);
     // 从 computedGetter 里调用 computed 的订阅器，当前 computed 订阅器中 deps 已经包含了依赖的 data.prop 的订阅器，
     // 然后对应的 data.prop 的订阅器也去添加 computed 的订阅者
     let i = this.deps.length;
