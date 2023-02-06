@@ -36,6 +36,9 @@ const vm = new Mvue({
       },
     },
   },
+  created(){
+    console.log('lifecycle created',this)
+  },
   methods: {
     handleAdd() {
       this.num1 = Number(this.num1) + 1;

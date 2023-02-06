@@ -1,9 +1,9 @@
-import { isFunction } from './tools';
+import { isFunction } from './index';
 
 /**
  * Default strategy.
  */
-const defaultStrat = function (parentVal: any, childVal: any): any {
+const defaultStrat = function (parentVal, childVal) {
   return childVal === undefined ? parentVal : childVal;
 };
 
