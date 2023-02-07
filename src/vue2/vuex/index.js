@@ -8,14 +8,32 @@ function install(Vue) {
 }
 
 export class Store {
-  constructor(options, Vue) {
+  constructor(options = {}) {
+    const { state = {}, getters = {}, mutations = {}, actions = {} } = options;
     this.options = options;
-    console.log(this.options);
-    console.log('Store',Vue)
+    this.getters = Object.create(null);
+    this._mutations = {};
+    this._actions = {};
+    this.state = state
+    this.bindGetter(getters);
   }
 
-  get state() {
-    return this.options.state;
+  commit(type, payload) {
+    this._mutations[type].call(this, payload);
+  }
+
+  dispatch(type, payload) {
+    return this._actions[type].call(this, payload);
+  }
+
+  bindGetter(getters) {
+    Object.keys(getters).forEach((key) => {
+      Object.defineProperty(this.getters, key, {
+        get: () => {
+          return getters[key](this.state)
+        },
+      });
+    });
   }
 }
 

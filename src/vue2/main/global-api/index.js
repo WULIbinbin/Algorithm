@@ -1,8 +1,13 @@
+import { observe } from '../observer/index';
 import { initUse } from './use';
 import { initMixin } from './mixin';
 
 export function initGlobalAPI(Vue) {
-  // Vue.options = Object.create(null)
+  Vue.observable = (obj) => {
+    observe(obj);
+    return obj;
+  };
+
   initUse(Vue);
   initMixin(Vue);
 }

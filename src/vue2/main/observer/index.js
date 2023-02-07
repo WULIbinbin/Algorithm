@@ -30,7 +30,7 @@ export function initData(vm) {
 }
 
 // 数据观察函数
-function observe(data) {
+export function observe(data) {
   if (!(data !== null && typeof data === 'object')) {
     return;
   }

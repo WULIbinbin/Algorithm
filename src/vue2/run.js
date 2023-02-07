@@ -6,13 +6,14 @@ const store = new Vuex.Store(
     state: {
       count: 0,
     },
+    getters: {
+      getCount: (state) => state.count,
+    },
   },
   Mvue,
 );
 
-Mvue.use(Vuex)
-
-console.log(Mvue.prototype);
+Mvue.use(Vuex);
 
 const vm = new Mvue({
   el: '#app',
@@ -49,7 +50,7 @@ const vm = new Mvue({
     },
   },
   created() {
-    console.log('lifecycle created', this);
+    console.log('created',this.$store)
   },
   methods: {
     handleAdd() {
