@@ -1,14 +1,14 @@
 import Mvue from './main/index';
 import Vuex from './vuex/index';
 
-// const store = new Vuex.Store(
-//   {
-//     state: {
-//       count: 0,
-//     },
-//   },
-//   Mvue,
-// );
+const store = new Vuex.Store(
+  {
+    state: {
+      count: 0,
+    },
+  },
+  Mvue,
+);
 
 Mvue.use(Vuex)
 
@@ -16,7 +16,7 @@ console.log(Mvue.prototype);
 
 const vm = new Mvue({
   el: '#app',
-  // store,
+  store,
   data() {
     return {
       num1: '',
