@@ -13,7 +13,6 @@ export function initMixin(MyVue) {
     callHook(vm, 'beforeCreate', [vm]);
     initState(vm, opts);
     callHook(vm, 'created');
-    new Compile(vm);
+    vm.$el && new Compile(vm);
   };
 }
-

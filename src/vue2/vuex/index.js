@@ -7,6 +7,7 @@ function install(Vue) {
   });
 }
 
+const _bindGetter = Symbol('bindGetter')
 export class Store {
   constructor(options = {}, Vue) {
     const { state = {}, getters = {}, mutations = {}, actions = {} } = options;
@@ -15,7 +16,7 @@ export class Store {
     this._mutations = mutations;
     this._actions = actions;
     this.state = Vue.observable(state);
-    this.bindGetter(getters);
+    this[_bindGetter](getters);
   }
 
   commit(type, value) {
@@ -26,7 +27,7 @@ export class Store {
     return this._actions[type](this, payload);
   }
 
-  bindGetter(getters) {
+  [_bindGetter](getters) {
     const store = this;
     Object.keys(getters).forEach((key) => {
       Object.defineProperty(this.getters, key, {

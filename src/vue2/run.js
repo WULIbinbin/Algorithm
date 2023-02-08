@@ -64,10 +64,6 @@ const vm = new Mvue({
     },
     handleCountAdd() {
       this.$store.commit('setCount', this.$store.state.count + 1);
-      console.log(this.$store)
-    },
-    handleCountNormalAdd() {
-      this.$store.state.count += 1;
     },
   },
 });
