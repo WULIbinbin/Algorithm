@@ -9,6 +9,12 @@ const store = new Vuex.Store(
     getters: {
       getCount: (state) => state.count,
     },
+    mutations: {
+      setCount(state, val) {
+        console.log(val);
+        state.count = val;
+      },
+    },
   },
   Mvue,
 );
@@ -50,11 +56,18 @@ const vm = new Mvue({
     },
   },
   created() {
-    console.log('created',this.$store)
+    console.log('created', this);
   },
   methods: {
-    handleAdd() {
+    handleNumAdd() {
       this.num1 = Number(this.num1) + 1;
+    },
+    handleCountAdd() {
+      this.$store.commit('setCount', this.$store.state.count + 1);
+      console.log(this.$store)
+    },
+    handleCountNormalAdd() {
+      this.$store.state.count += 1;
     },
   },
 });

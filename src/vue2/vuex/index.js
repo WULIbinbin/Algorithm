@@ -8,29 +8,30 @@ function install(Vue) {
 }
 
 export class Store {
-  constructor(options = {}) {
+  constructor(options = {}, Vue) {
     const { state = {}, getters = {}, mutations = {}, actions = {} } = options;
     this.options = options;
     this.getters = Object.create(null);
-    this._mutations = {};
-    this._actions = {};
-    this.state = state
+    this._mutations = mutations;
+    this._actions = actions;
+    this.state = Vue.observable(state);
     this.bindGetter(getters);
   }
 
-  commit(type, payload) {
-    this._mutations[type].call(this, payload);
+  commit(type, value) {
+    this._mutations[type](this.state, value);
   }
 
   dispatch(type, payload) {
-    return this._actions[type].call(this, payload);
+    return this._actions[type](this, payload);
   }
 
   bindGetter(getters) {
+    const store = this;
     Object.keys(getters).forEach((key) => {
       Object.defineProperty(this.getters, key, {
         get: () => {
-          return getters[key](this.state)
+          return getters[key](store.state);
         },
       });
     });

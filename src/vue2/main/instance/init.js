@@ -1,6 +1,6 @@
 import { initState } from './state';
 import { callHook } from './lifecycle';
-import { Compile } from './complie';
+import { Compile } from '../compiler/complie';
 import { mergeOptions } from '../utils/options';
 
 export function initMixin(MyVue) {
