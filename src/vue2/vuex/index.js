@@ -27,6 +27,7 @@ export class Store {
     return this._actions[type](this, payload);
   }
 
+  // 模拟ts私有函数，不被开发在实例调用（用Reflect.ownKeys还是能拿到）
   [_bindGetter](getters) {
     const store = this;
     Object.keys(getters).forEach((key) => {
