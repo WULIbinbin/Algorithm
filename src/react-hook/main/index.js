@@ -1,5 +1,8 @@
 const HOOKS = [];
 let currentIndex = 0;
+// 1、函数式组件初始化调用时，会把组件中所有的hook函数按调用顺序保存到链表中（react源码用的是链表，这里用数组模拟）。
+// 2、每个hook函数在调用前，都会保存本次自己在链表中的下标。
+// 3、链表用来保存hook的存取值，比如useState是保存state，useEffect是保存回调函数和依赖。
 const Tick = {
   render: null,
   queue: [],
@@ -24,11 +27,12 @@ function useState(initialState) {
   HOOKS[currentIndex] = HOOKS[currentIndex] || (typeof initialState === 'function' ? initialState() : initialState);
   const memoryCurrentIndex = currentIndex; // currentIndex 是全局可变的，需要保存本次的
   const setState = (p) => {
-    console.log('useState', currentIndex, memoryCurrentIndex);
     let newState = p;
+    // setCount(count => count + 1)  判断这种用法
     if (typeof p === 'function') {
       newState = p(HOOKS[memoryCurrentIndex]);
     }
+    // 如果设置前后的值一样，就不更新了
     if (newState === HOOKS[memoryCurrentIndex]) return;
     Tick.nextTick(() => {
       HOOKS[memoryCurrentIndex] = newState;
@@ -74,6 +78,7 @@ function useCallback(fn, deps) {
 
 export default {
   Tick,
+  HOOKS,
   useState,
   useEffect,
   useReducer,

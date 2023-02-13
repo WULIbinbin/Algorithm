@@ -1,6 +1,6 @@
 import hooks from './main/index';
 
-const { Tick, useState, useEffect, useReducer, useMemo, useCallback } = hooks;
+const { Tick, HOOKS, useState, useEffect, useReducer, useMemo, useCallback } = hooks;
 const reducer = (state, action) => {
   switch (action.type) {
     case 'increment':
@@ -18,11 +18,17 @@ function render() {
   useEffect(() => {
     console.log('count 改变了');
     // 清除副作用、支持回调
-    time = setInterval(() => {
-      setCount((count) => count + 1);
-    }, 1000);
+    // setCount((count) => count + 1);
     return () => {
-      time && clearInterval(time);
+      // time && clearInterval(time);
+    };
+  }, [count]);
+  useEffect(() => {
+    console.log('count 改变了');
+    // 清除副作用、支持回调
+    // setCount((count) => count + 1);
+    return () => {
+      // time && clearInterval(time);
     };
   }, [count]);
   document.querySelector('.add').onclick = () => {
@@ -32,7 +38,7 @@ function render() {
     time && clearInterval(time);
   };
   document.querySelector('#count').innerHTML = count;
-  console.log(this)
+  console.log(HOOKS)
 }
 Tick.render = render;
 render();
