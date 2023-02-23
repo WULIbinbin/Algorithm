@@ -2,13 +2,13 @@
 ----
 #### 运行
 ```js
-npm run dev
+// vue2+vuex示例
+npm run dev:vue2
+// react+hook示例
+npm run dev:react
+// es6实现示例
+npm run dev:com
+// 数据结构示例
+npm run dev:data
+
 ```
-#### Vue2 demo路径
-http://127.0.0.1:8897/vue2.html
-
-#### ES6 demo路径
-http://127.0.0.1:8897/common.html
-
-#### 数据结构demo路径
-http://127.0.0.1:8897/data-structure.html

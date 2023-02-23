@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "vite",
+    "dev:vue2": "vite serve --open /vue2.html",
+    "dev:com": "vite serve --open /common.html",
+    "dev:data": "vite serve --open /data-structure.html",
+    "dev:react": "vite serve --open /react-hook.html",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint ./src --ext js,jsx",

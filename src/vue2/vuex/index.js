@@ -7,7 +7,7 @@ function install(Vue) {
   });
 }
 
-const _bindGetter = Symbol('bindGetter')
+const _bindGetter = Symbol('bindGetter');
 export class Store {
   constructor(options = {}, Vue) {
     const { state = {}, getters = {}, mutations = {}, actions = {} } = options;
@@ -38,6 +38,13 @@ export class Store {
       });
     });
   }
+}
+
+export function mapGetter(getterName, getterPath) {
+  const fn = function () {
+    console.log('mapGetter', this);
+  };
+  return [fn];
 }
 
 export default {

@@ -3,7 +3,7 @@ import { callHook } from '../instance/lifecycle';
 import { parsePath, _set } from '../utils/index';
 
 // Compile 解析器
-// 用来解析指令初始化模板，一个是用来添加添加订阅者，绑定更新函数
+// 用来解析指令初始化模板，模拟vue2添加订阅者，绑定更新函数
 // /\{\{((?:.|\r?\n)+?)\}\}/g;
 const reg = /\{\{(.+?)\}\}/;
 export function Compile(vm) {
@@ -86,7 +86,6 @@ Compile.prototype = {
     // 如果元素带 v-model，则绑定对应输入事件（如onInput）和 订阅者（watcher），
     // console.log('compileModel', node, prop);
     // parsePath处理对象属性路径
-    console.log(prop)
     const val = parsePath(prop)(this.vm);
     this.updateModel(node, val);
     new Watcher(this.vm, prop, (value) => {
@@ -103,7 +102,7 @@ Compile.prototype = {
   compileText(node, prop) {
     // 绑定订阅者（watcher）
     let text = parsePath(prop)(this.vm);
-    console.log(prop,text)
+    // console.log(prop,text)
     this.updateView(node, text);
     new Watcher(this.vm, prop, (value) => {
       this.updateView(node, value);
