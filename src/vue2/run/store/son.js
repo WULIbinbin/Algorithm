@@ -1,14 +1,16 @@
 const store = {
   state: {
-    count: 0,
+    son: {
+      name:'bb'
+    },
   },
   getters: {
-    count: (state) => state.count,
+    son: (state) => state.son,
   },
   mutations: {
-    setCount(state, val) {
+    setSon(state, val) {
       console.log(val);
-      state.count = val;
+      state.son = val;
     },
   },
 };

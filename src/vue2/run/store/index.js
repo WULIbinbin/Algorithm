@@ -1,7 +1,7 @@
 import Vue from '../../main/index';
 import Vuex from '../../vuex/index';
-import countModule from './count';
-import userModule from './user';
+import count from './count';
+import user from './user';
 
 export default new Vuex.Store(
   {
@@ -9,8 +9,8 @@ export default new Vuex.Store(
     mutations: {},
     actions: {},
     modules: {
-      countModule,
-      userModule,
+      count,
+      user,
     },
   },
   Vue,

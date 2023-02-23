@@ -1,16 +1,27 @@
+import son from './son'
+
 const store = {
   state: {
     user: {},
   },
   getters: {
-    getUserInfo: (state) => state.user,
+    user: (state) => state.user,
   },
   mutations: {
     setUser(state, val) {
-      console.log(val);
       state.user = val;
     },
   },
+  actions:{
+    getUser(state){
+      state.setUser({
+        name:'binbin'
+      })
+    }
+  },
+  modules:{
+    son
+  }
 };
 
 export default store;
