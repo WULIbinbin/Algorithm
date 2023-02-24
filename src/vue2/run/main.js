@@ -1,5 +1,5 @@
 import Mvue from '../main/index';
-import Vuex, { mapGetter } from '../vuex/index';
+import Vuex from '../vuex/index';
 import store from './store/index'
 
 Mvue.use(Vuex);
@@ -24,7 +24,6 @@ const vm = new Mvue({
       // console.log('reduce计算了', this);
       return Number(this.num1) + Number(this.num2);
     },
-    ...mapGetter('main')
   },
   watch: {
     num1(val) {

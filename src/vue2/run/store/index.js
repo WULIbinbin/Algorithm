@@ -6,7 +6,11 @@ import user from './user';
 export default new Vuex.Store(
   {
     getters: {},
-    mutations: {},
+    mutations: {
+      getAny(state){
+        console.log(state)
+      }
+    },
     actions: {},
     modules: {
       count,
