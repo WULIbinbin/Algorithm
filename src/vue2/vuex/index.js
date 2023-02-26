@@ -1,4 +1,5 @@
 import Store from './store';
+import { mapMutations } from './helpers';
 
 function install(Vue) {
   Vue.mixin({
@@ -12,4 +13,5 @@ function install(Vue) {
 export default {
   Store,
   install,
+  mapMutations,
 };
