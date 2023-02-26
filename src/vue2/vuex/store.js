@@ -1,14 +1,14 @@
 import ModuleCollection from './module/module-collection';
-import { installModule } from './store-util';
+import { installModule, resetStoreState } from './store-util';
 const _bindGetter = Symbol('bindGetter');
 
 export default class Store {
   constructor(options = {}, Vue) {
-    console.log(options);
     this._mutations = Object.create(null);
     this._actions = Object.create(null);
+    this._wrappedGetters = Object.create(null);
     this._modules = new ModuleCollection(options);
-    this._modulesNamespaceMap =  Object.create(null);
+    this._modulesNamespaceMap = Object.create(null);
     console.log(this._modules);
 
     const state = this._modules.root.state;
@@ -23,34 +23,23 @@ export default class Store {
     };
 
     installModule(this, state, [], this._modules.root);
+
+    resetStoreState(this, state, Vue);
   }
 
-  commit(type, value) {
-    this._mutations[type](this.state, value);
+  commit(type, payload) {
+    try {
+      this._mutations[type](payload);
+    } catch (e) {
+      console.error(`mutation ${type} is not exist`);
+    }
   }
 
   dispatch(type, payload) {
-    return this._actions[type](this, payload);
-  }
-
-  // 模拟ts私有函数，不被开发在实例调用（用Reflect.ownKeys还是能拿到）
-  [_bindGetter](getters) {
-    const store = this;
-    Object.keys(getters).forEach((key) => {
-      Object.defineProperty(this.getters, key, {
-        get: () => {
-          return getters[key](store.state);
-        },
-      });
-    });
+    try {
+      return this._actions[type](payload);
+    } catch (e) {
+      console.error(`action ${type} is not exist`);
+    }
   }
 }
-
-// export function mapGetter(getterName, getterPath) {
-//   const fn = function () {
-//     console.log('mapGetter', this);
-//   };
-//   return {
-//     fn,
-//   };
-// }

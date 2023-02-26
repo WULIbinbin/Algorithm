@@ -1,6 +1,6 @@
 import Mvue from '../main/index';
 import Vuex from '../vuex/index';
-import store from './store/index'
+import store from './store/index';
 
 Mvue.use(Vuex);
 
@@ -42,13 +42,14 @@ const vm = new Mvue({
   },
   created() {
     console.log('created', this);
+    this.$store.commit('countModule/setCount', 2);
   },
   methods: {
     handleNumAdd() {
       this.num1 = Number(this.num1) + 1;
     },
     handleCountAdd() {
-      this.$store.commit('setCount', this.$store.state.count + 1);
+      this.$store.commit('countModule/setCount', this.$store.state.countModule.count + 1);
     },
   },
 });

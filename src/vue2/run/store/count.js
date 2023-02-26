@@ -7,7 +7,6 @@ const store = {
   },
   mutations: {
     setCount(state, val) {
-      console.log(val);
       state.count = val;
     },
   },

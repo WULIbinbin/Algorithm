@@ -9,7 +9,6 @@ const store = {
   },
   mutations: {
     setSon(state, val) {
-      console.log(val);
       state.son = val;
     },
   },

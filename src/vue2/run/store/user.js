@@ -1,4 +1,4 @@
-import son from './son'
+import sonModule from './son'
 
 const store = {
   state: {
@@ -20,7 +20,7 @@ const store = {
     }
   },
   modules:{
-    son
+    sonModule
   }
 };
 
