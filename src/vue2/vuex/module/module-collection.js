@@ -34,7 +34,6 @@ export default class ModuleCollection {
 
     if (rawModule.modules) {
       forEachValue(rawModule.modules, (rawChildModule, key) => {
-        console.log(rawChildModule, key, path);
         this.register(path.concat(key), rawChildModule);
       });
     }

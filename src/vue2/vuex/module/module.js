@@ -30,19 +30,6 @@ export default class Module {
     return key in this._children;
   }
 
-  update(rawModule) {
-    this._rawModule.namespaced = rawModule.namespaced;
-    if (rawModule.actions) {
-      this._rawModule.actions = rawModule.actions;
-    }
-    if (rawModule.mutations) {
-      this._rawModule.mutations = rawModule.mutations;
-    }
-    if (rawModule.getters) {
-      this._rawModule.getters = rawModule.getters;
-    }
-  }
-
   forEachChild(fn) {
     forEachValue(this._children, fn);
   }

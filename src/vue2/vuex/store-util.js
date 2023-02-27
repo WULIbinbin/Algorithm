@@ -1,4 +1,4 @@
-import { forEachValue, partial } from './util';
+import { forEachValue, partial, isPromise } from './util';
 
 export function installModule(store, rootState, path, module) {
   const isRoot = !path.length;
@@ -14,7 +14,7 @@ export function installModule(store, rootState, path, module) {
     parentState[moduleName] = module.state;
   }
 
-  const local = (module.context = module);
+  const local = (module.context = makeLocalContext(store, namespace, module));
 
   module.forEachMutation((mutation, key) => {
     const namespacedType = namespace + key;
@@ -92,4 +92,29 @@ export function resetStoreState(store, state, Vue) {
 
 export function getNestedState(state, path) {
   return path.reduce((state, key) => state[key], state);
+}
+
+export function makeLocalContext(store, namespace,module) {
+  const noNamespace = namespace === '';
+  const local = {
+    dispatch: noNamespace
+      ? store.dispatch
+      : (_type, _payload, _options) => {
+          let type = _type;
+          if (!_options || !_options.root) {
+            type = namespace + _type;
+          }
+          return store.dispatch(type, _payload);
+        },
+    commit: noNamespace
+      ? store.commit
+      : (_type, _payload, _options) => {
+          let type = _type;
+          if (!_options || !_options.root) {
+            type = namespace + _type;
+          }
+          return store.commit(type, _payload, _options);
+        },
+  };
+  return Object.assign(local, module);
 }

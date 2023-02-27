@@ -1,6 +1,5 @@
 import ModuleCollection from './module/module-collection';
 import { installModule, resetStoreState } from './store-util';
-const _bindGetter = Symbol('bindGetter');
 
 export default class Store {
   constructor(options = {}, Vue) {
@@ -28,18 +27,10 @@ export default class Store {
   }
 
   commit(type, payload) {
-    try {
-      this._mutations[type](payload);
-    } catch (e) {
-      console.error(`mutation ${type} is not exist`);
-    }
+    this._mutations[type](payload);
   }
 
   dispatch(type, payload) {
-    try {
-      return this._actions[type](payload);
-    } catch (e) {
-      console.error(`action ${type} is not exist`);
-    }
+    return this._actions[type](payload);
   }
 }

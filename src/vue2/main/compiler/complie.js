@@ -102,7 +102,6 @@ Compile.prototype = {
   compileText(node, prop) {
     // 绑定订阅者（watcher）
     let text = parsePath(prop)(this.vm);
-    // console.log(prop,text)
     this.updateView(node, text);
     new Watcher(this.vm, prop, (value) => {
       this.updateView(node, value);

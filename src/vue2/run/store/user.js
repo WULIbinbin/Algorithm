@@ -1,27 +1,32 @@
-import sonModule from './son'
+import sonModule from './son';
 
+let timer = null;
 const store = {
   state: {
     user: {},
   },
   getters: {
-    user: (state) => state.user,
+    user: (state) => JSON.stringify(state.user),
   },
   mutations: {
     setUser(state, val) {
       state.user = val;
     },
   },
-  actions:{
-    getUser(state){
-      state.setUser({
-        name:'binbin'
-      })
-    }
+  actions: {
+    userLogin({ state, commit }) {
+      console.log(state);
+      timer && clearTimeout(timer);
+      timer = setTimeout(() => {
+        commit('setUser', {
+          name: 'binbin',
+        });
+      }, 1000);
+    },
   },
-  modules:{
-    sonModule
-  }
+  modules: {
+    sonModule,
+  },
 };
 
 export default store;

@@ -1,5 +1,5 @@
 import Mvue from '../main/index';
-import Vuex from '../vuex/index';
+import Vuex, { mapMutations, mapActions, mapGetters } from '../vuex/index';
 import store from './store/index';
 
 Mvue.use(Vuex);
@@ -24,6 +24,7 @@ const vm = new Mvue({
       // console.log('reduce计算了', this);
       return Number(this.num1) + Number(this.num2);
     },
+    ...mapGetters('userModule', ['user']),
   },
   watch: {
     num1(val) {
@@ -45,11 +46,19 @@ const vm = new Mvue({
     this.$store.commit('countModule/setCount', 2);
   },
   methods: {
+    ...mapMutations('countModule', ['setCount']),
+    ...mapActions('userModule', ['userLogin']),
     handleNumAdd() {
       this.num1 = Number(this.num1) + 1;
     },
-    handleCountAdd() {
+    handleCountAddByCommit() {
       this.$store.commit('countModule/setCount', this.$store.state.countModule.count + 1);
+    },
+    handleCountAddByMutation() {
+      this.setCount(this.$store.state.countModule.count + 1);
+    },
+    handleChangeUserByAction() {
+      this.userLogin();
     },
   },
 });
