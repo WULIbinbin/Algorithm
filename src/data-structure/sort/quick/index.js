@@ -12,34 +12,34 @@
     链接：https://juejin.cn/post/7203714680316592188
  */
 
-export default function QuickSort(arr=[]){
+export default function QuickSort(arr = []) {
   const len = arr.length - 1
-  function sort(left,right){
-      if(left>=right)return
-      let i = left
-      let j = right
-      const base = arr[left]
-      while (i<j) {
-          while (i<j&&arr[j]>=base) {
-              j--
-          }
-          if(i<j){
-              arr[i] = arr[j]
-              i++
-          }
-          while (i<j&&arr[i]<=base) {
-              i++
-          }
-          if(i<j){
-              arr[j] = arr[i]
-              j--
-          }
+  function sort(left, right) {
+    if (left >= right) return
+    let i = left
+    let j = right
+    const base = arr[left]
+    while (i < j) {
+      while (i < j && arr[j] >= base) {
+        j--
       }
-      arr[i] = base
-      sort(left,i-1)
-      sort(i+1,right)
+      if (i < j) {
+        arr[i] = arr[j]
+        i++
+      }
+      while (i < j && arr[i] <= base) {
+        i++
+      }
+      if (i < j) {
+        arr[j] = arr[i]
+        j--
+      }
+    }
+    arr[i] = base
+    sort(left, i - 1)
+    sort(i + 1, right)
   }
-  sort(0,len)
+  sort(0, len)
   return arr
 }
 
