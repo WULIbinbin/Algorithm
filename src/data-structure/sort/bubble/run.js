@@ -1,5 +1,5 @@
 import render from '../../utils/renderArray';
-import quickSearch from './index';
+import bubbleSearch from './index';
 
 const random = (i) => {
   const r = [];
@@ -10,13 +10,13 @@ const random = (i) => {
   return r;
 };
 
-const unit = 12;
-const num = 40;
+const unit = 16;
+const num = 20;
 const li = random(num);
 console.log('原数组:', li);
 
 render(li, {
   unit,
   canvasWidth: num * unit,
-  func: quickSearch,
+  func: bubbleSearch,
 });

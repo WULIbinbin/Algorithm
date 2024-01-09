@@ -3,13 +3,16 @@ import { init } from './view';
 
 const binaryTree = new BinaryTree();
 
-binaryTree.init([
-  18, 12, 5, 16, 8,
-  // 14, 2, 1, 31, 21, 17, 27, 9, 6, 34, 4, 49, 32, 19,
-]);
+const defaultArray = [
+  14, 2, 31, 21, 17, 9, 6, 34, 4, 49, 32, 19,
+]
 
-binaryTree.insert(20);
-binaryTree.insert(3);
+console.log('原始数组',defaultArray)
+
+binaryTree.init(defaultArray);
+
+// binaryTree.insert(20);
+// binaryTree.insert(3);
 
 console.log(binaryTree.root);
 

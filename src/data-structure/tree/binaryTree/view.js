@@ -2,7 +2,7 @@ import { Canvas, Circle, Text, Line, Rect } from '@antv/g';
 import { Renderer } from '@antv/g-canvas';
 
 export async function init(tree) {
-  const unit = 50;
+  const unit = 40;
   const deep = getDeepOfTree(tree);
   let canvasWidth = 800;
   const distance = (deep - 1) ** 2;
@@ -100,7 +100,7 @@ export async function init(tree) {
         y: cy + 7,
         text: String(value),
         textAlign: 'center',
-        fontSize: 18,
+        fontSize: 16,
         fill: '#666666',
         zIndex: 3,
       },

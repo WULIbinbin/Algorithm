@@ -15,7 +15,7 @@
     https://pic4.zhimg.com/v2-1a0f6aac58c41bbf7e71c187704f9f97_b.webp
 */
 
-function BubbleSort(arr) {
+export default function BubbleSort(arr, callback) {
   const len = arr.length;
   for (let i = 0; i < len; i++) {
     // 3
@@ -26,7 +26,10 @@ function BubbleSort(arr) {
         arr[j + 1] = arr[j];
         arr[j] = temp;
       }
+
+      callback && callback(arr);
     }
   }
   console.log(arr);
+  return arr
 }
